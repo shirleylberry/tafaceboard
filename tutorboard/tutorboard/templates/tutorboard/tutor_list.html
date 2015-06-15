@@ -1,0 +1,23 @@
+{% extends "tutorboard/base.html" %}
+{% load static from staticfiles %}
+
+{% block content %}
+
+    <div id="filters">
+
+        {% block filters %}
+            <span><a class="reset-all" href="#"><img class="reset" src="{% static "img/Reset_Button.png" %}"
+                                                     alt="reset"></a></span>
+            {% include "tutorboard/partials/filter_menu_rendered.html" %}
+        {% endblock %}
+
+    </div>
+
+    <div id="tutorboard">
+        {% include 'tutorboard/partials/tutorboard.html' with tutor_list=tutor_list %}
+    </div>
+
+    {% comment %}
+	<a id='create-tutor' href="/tutorboard/0/update"><img src="/media/images/create.png" alt="create tutor" style="position:absolute;top:59px;left:197px;"></a>
+	{% endcomment %}
+{% endblock %}

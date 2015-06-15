@@ -1,0 +1,37 @@
+{% extends "tutorboard/base.html" %}
+{% load custom_tags %}
+
+{% block content %}
+<div id="tutorlist" class = "avail-form">
+	<form action="" method="post">
+
+	{{ formset.management_form }}
+	{% csrf_token %}
+	    {% for form in formset %}
+            {{ form.id }}
+            {% if not form.instance.hidden %}
+            <div class="tutor-availability">
+                    <div class = "tutor-block">
+                            <h1 class="name">{{ form.fname.value|default_if_none:"" }} {{ form.lname.value|default_if_none:"" }}</h1>
+                            {{ form.fname.as_hidden }}
+                            {{ form.lname.as_hidden }}
+                            <span>{{ form.availability }}</span>
+                    </div>
+                    <div class = 'days'>
+                        {% if form.instance.availability_updated|timesince|days_diff >= 24 %}
+                            <div class = 'needs-update last-updated'> {{ form.instance.availability_updated | timesince }} </div>
+                        {% elif form.instance.availability_updated|timesince|days_diff >= 14 %}
+                            <div class = 'should-update last-updated'> {{ form.instance.availability_updated | timesince }} </div>
+                        {% elif form.instance.availability_updated|timesince|days_diff == -1 %}
+                            <div class = 'never-updated last-updated'> !!!!!!! </div>
+                        {% else %}
+                            <div class = 'recent-update last-updated'> {{ form.instance.availability_updated | timesince }} </div>
+                        {% endif %}
+                    </div>
+            </div>
+            {% endif %}
+	    {% endfor %}
+	    <input type="submit" value="update">
+	</form>
+</div>
+{% endblock %}

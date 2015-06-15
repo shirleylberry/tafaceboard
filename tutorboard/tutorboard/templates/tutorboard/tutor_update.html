@@ -1,0 +1,194 @@
+{% extends "tutorboard/base.html" %}
+{% load custom_tags %}
+
+{% block content %}
+
+{{ success }}
+
+<div id="tutor-update">
+
+<div class="update-info">
+<form method="post" action="">
+
+     
+    {% for field in tutor_form %}    
+        
+        <div class="update-info-unit"
+            {% if field|is_textarea %}style="display:block;"{% endif %}
+            {% if field|is_upload%}style="display:block;"{% endif %}
+        >
+        {% if field|is_upload %}
+           <img class="update-img" src="/media/{{field.value}}" alt="tutor picture" />
+        {% endif %}
+            {% if field.field.is_hidden %}
+            {% else %}
+                <div>{{ field.label_tag }}</div>
+            {% endif %}
+            {{ field }}        
+        </div>
+        
+        
+    {% endfor %}           
+
+
+    {% csrf_token %}
+
+    
+    <input type="submit" name="save" value="save">
+    
+    {% if next_tutor %}
+    <input type="submit" name="saveAndNext" value="save and next">
+    {% endif %}
+
+</form>
+
+{% if tutor_id != '0' %}
+
+<script>
+
+// From django docs for ajax post with CSRF
+
+function getCookie(name) {
+    var cookieValue = null;
+    if (document.cookie && document.cookie != '') {
+        var cookies = document.cookie.split(';');
+        for (var i = 0; i < cookies.length; i++) {
+            var cookie = jQuery.trim(cookies[i]);
+            // Does this cookie string begin with the name we want?
+            if (cookie.substring(0, name.length + 1) == (name + '=')) {
+                cookieValue = decodeURIComponent(cookie.substring(name.length + 1));
+                break;
+            }
+        }
+    }
+    return cookieValue;
+}
+var csrftoken = getCookie('csrftoken');
+
+function csrfSafeMethod(method) {
+    // these HTTP methods do not require CSRF protection
+    return (/^(GET|HEAD|OPTIONS|TRACE)$/.test(method));
+}
+$.ajaxSetup({
+    crossDomain: false, // obviates need for sameOrigin test
+    beforeSend: function(xhr, settings) {
+        if (!csrfSafeMethod(settings.type)) {
+            xhr.setRequestHeader("X-CSRFToken", csrftoken);
+        }
+    }
+});
+
+function checkboxChange() {
+        var $clickedCheckBox = $(this);
+        console.log($clickedCheckBox );
+        var $parentLabel = $clickedCheckBox.parent();
+        console.log($parentLabel);
+        var $checkResult = $parentLabel.nextAll(".checkResult");
+        var $subject_update_model = $parentLabel.parent(".subject-update-model");
+        console.log($subject_update_model);
+        
+        subID = $parentLabel.nextAll(".hiddenSub").val();
+        if (! subID) {subID = -1;}
+        capID = $parentLabel.nextAll(".hiddenCap").val();
+        if (! capID) {capID = -1;}
+        
+        var checkedAction = '';
+        
+        if ($(this).is(":checked")){
+            checkedAction = 'checked';
+        }
+        else {
+            checkedAction = 'unchecked';
+        }
+        
+        $($clickedCheckBox).replaceWith('<img src="/media/images/spinner.gif">');
+        
+        var postData = { subjectID: subID, capabilityID: capID, checked: checkedAction };
+        
+        $.post( "/tutorboard/{{tutor_id}}/update/ajax/subjectlist/", postData,  function( data ) {
+            $($subject_update_model).replaceWith( data );
+            //$('.checkboxSub').off();
+            //$('.checkboxSub').change(checkboxChange);
+            //$('.subUpdateSubmit').off();
+            //$('.subUpdateSubmit').click(subjectUpdateSubmit);
+        });
+}
+
+function subjectUpdateSubmit(event) {
+    // Do ajax submit
+    var $form = $(this).parent("form");
+    
+    var subID = $form.parent(".capability-form").prevAll(".hiddenSub").val();
+    if (! subID) {subID = -1;}
+
+    var capID = $form.parent(".capability-form").prevAll(".hiddenCap").val();
+    if (! capID) {capID = -1;}
+        
+    var checkedAction = '';
+
+    $(this).replaceWith('<img src="/media/images/spinner.gif">');
+    
+    $.post("/tutorboard/{{tutor_id}}/update/ajax/subjectlist/", $form.serialize(), function(data){
+        $form.parent('.capability-form').parent('.subject_update_model').replaceWith(data);
+        $('.checkboxSub').off();
+        $('.checkboxSub').change(checkboxChange);
+        $('.subUpdateSubmit').off();
+        $('.subUpdateSubmit').click(subjectUpdateSubmit);
+    });
+  event.preventDefault();
+  return false;
+}
+
+function fixPhoneNumber(){
+    var newnum = new String();
+    var rawnum = $(this).val();
+    rawnum = rawnum.replace(/[\D]/g,'');
+    if (rawnum.length != 10){
+        alert("Please enter a 10-digit phone number")
+    }
+    else{
+        newnum=newnum.concat(rawnum.substr(0,3),".",rawnum.substr(3,3),".",rawnum.substr(6,4));
+        $(this).val(newnum);
+    }
+}
+
+$( document ).ready(function() {
+    $.get( "/tutorboard/{{tutor_id}}/update/ajax/subjectlist/", function( data ) {
+      $( "#subjectList" ).html( data );
+      $(document).on('change','.checkboxSub',checkboxChange);
+      $('.subUpdateSubmit').click(subjectUpdateSubmit);
+    });
+    
+	$("#id_cell").blur(fixPhoneNumber);
+	$("#id_altphone").blur(fixPhoneNumber);
+    
+});
+</script>
+
+
+<!-- Subject checklist partial view -->
+<div id="subjectList"><img src="/media/images/spinner.gif"></div>
+<!-- End of subject checklist partial view -->
+
+{% if prev_tutor %}
+<span class="next-button"><a href="/tutorboard/{{ prev_tutor.id }}/update">Edit previous tutor: {{ prev_tutor.fname }} {{ prev_tutor.lname }}</a></span>
+{% endif %}
+
+{% if next_tutor %}
+<span class="next-button"><a href="/tutorboard/{{ next_tutor.id }}/update">Edit next tutor: {{ next_tutor.fname }} {{ next_tutor.lname }}</a></span>
+{% endif %}
+
+{% else %}
+<div style="margin-left:10px;"><h2>In order to add capabilities to this tutor please click save first and then click update on this tutor's card</h2></div>
+
+{% endif %} <!-- end for loop condition if tutor_id -->
+</div>
+        <div class = "errors">{{ form_errors }}</div>
+</div>
+<br>
+<br>
+<br>
+<br>
+<br>
+<br>
+{% endblock %}

@@ -1,0 +1,77 @@
+<!DOCTYPE html>
+
+{% load staticfiles %}
+
+<html>
+<head>
+	<title>TA Tutorboard</title>
+    <meta name="viewport" content="width=device-width, user-scalable=yes">
+
+	<link rel="stylesheet" type="text/css" href="{% static "css/reset.css" %}" >
+    <link rel="stylesheet" type="text/css" href="{% static "css/jquery-ui.css" %}" />
+	<link href='http://fonts.googleapis.com/css?family=Lato:100,400,900,900italic' rel='stylesheet' type='text/css'>
+	<link rel="stylesheet" type="text/css" href="{% static "css/style.css" %}" >
+	
+        
+	<script src="{% static "js/jquery.min.js" %}"></script>
+    <script src="{% static "js/jquery-ui.min.js" %}"></script>
+	<script src="{% static "js/isotope.min.js" %}"></script>
+	<script src="{% static "js/concept.js" %}"></script>
+    <script src="{% static "js/expand.js" %}"></script>
+    <script src="{% static "js/filters.js" %}"></script>
+
+</head>
+
+<body>
+	<div id="header">
+		<div id="header-left">
+			<a href="/tutorboard/"> <img alt="logo" id="logo" src="{{ STATIC_URL }}img/Logo.png"> </a>
+            
+		</div>
+		<div id="header-right">
+			<div id="btn-sort">
+                <a class="btn-link header-button" href="/tutorboard/availability">Update Hours</a>
+
+                <a class="btn-link header-button" href="/tutorboard/0/update">Create Tutor</a>
+                <span class = "separator"> | </span>
+				<a class="btn-sort header-button" href="#name">Name
+				    <span class='arrowUp'>&and;</span><span class='arrowDown'>&or;</span>
+				</a>
+				
+				<a class="btn-sort header-button" href="#availability">Availability
+				    <span class='arrowUp'>&and;</span><span class='arrowDown'>&or;</span>
+				</a>
+				
+				<a class="btn-sort header-button" href="#level">Level
+				    <span class='arrowUp'>&and;</span><span class='arrowDown'>&or;</span>
+				</a>
+				
+				<a class="btn-sort header-button" href="#magic">Magic
+				    <span class='arrowUp'>&and;</span><span class='arrowDown'>&or;</span>
+				</a>
+				
+			</div>
+            <div id="search-container">
+                <form id="search-form" method="post" action=".">
+                    <input name="search" type="text" id="searchbar">
+                    <input type="submit" value="Go">
+                </form>
+            </div>
+		</div>
+	</div>
+
+
+<div id="content-container">
+{% block content %}{% endblock %}
+</div>
+
+	<div id="footer">
+	<div id="copyright">Tutor Associates</div>
+		<div id="footer-middle">
+			<span>&bull;&nbsp;&bull;&nbsp;&bull;&nbsp;</span>
+		</div>
+	</div>
+
+</body>
+
+</html>

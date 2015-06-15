@@ -1,0 +1,35 @@
+{% extends "tutorboard/base.html" %}
+
+{% block content %}
+
+{{ success }}
+<div style="height:60px;"></div>
+<form action="." method="post">
+    
+    {% csrf_token %}          
+          
+            {{ form.as_p }}
+    
+    
+    
+    <input type="submit" name="save" value="save">
+        
+        <input type="submit" name="saveAndNext" value="save and next">
+            
+ </form>
+            {% if prev_tutor %}
+            <span><a href="/tutorboard/{{ prev_tutor.id }}/update">Edit previous tutor: {{ prev_tutor.fname }} {{ prev_tutor.lname }}</a></span>
+            {% endif %}
+            
+            {% if next_tutor %}
+            <span><a href="/tutorboard/{{ next_tutor.id }}/update">Edit next tutor: {{ next_tutor.fname }} {{ next_tutor.lname }}</a></span>
+            {% endif %}
+</div>
+</div>
+<br>
+<br>
+<br>
+<br>
+<br>
+<br>
+{% endblock %}

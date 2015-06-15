@@ -1,0 +1,74 @@
+<!DOCTYPE html>
+
+{% load staticfiles %}
+
+<html>
+<head>
+	<title>Isotope Concept</title>
+
+	<link href='http://fonts.googleapis.com/css?family=Lato:100,400,900,900italic' rel='stylesheet' type='text/css'>
+	<link rel="stylesheet" type="text/css" href="{% static "css/reset.css" %}" >
+	<link rel="stylesheet" type="text/css" href="{% static "css/style.css" %}" >
+
+        
+	<script type="text/javascript" src="http://ajax.googleapis.com/ajax/libs/jquery/1.10.2/jquery.min.js"></script>
+        <script src="//ajax.googleapis.com/ajax/libs/jqueryui/1.10.3/jquery-ui.min.js"></script>
+	<script src="{% static "js/isotope.min.js" %}"></script>
+	<script src="{% static "js/concept.js" %}"></script>
+    <script src="{% static "js/expand.js" %}"></script>
+
+</head>
+
+<body>
+	<div id="header">
+		<div id="header-left">
+			<span id="logo">TA Tutor Board</span>
+		</div>
+		<div id="header-right">
+			<div id="btn-sort">
+				<span class="header-button"><a class="btn-sort" href="#name">Lastname</a></span>
+				<span class="header-button"><a class="btn-sort" href="#availability">Availability</a></span>
+				<span class="header-button"><a class="btn-sort" href="#level">Level</a></span>
+			</div>
+		</div>
+	</div>
+<div id="filters">
+<form action="" method="post">
+{{search_form}}
+{% csrf_token %}
+<input type="submit" value="search">
+</form>
+</div>
+
+<div id="content-container">
+	<div id="tutorboard">
+		<div id="invis" class="tutor"></div>
+		{% for tutor in tutor_list %}
+
+		<div class="tutor math cornerstone" data-category="professional">
+			<div class="picture-area">
+				<img src="../media/{{ tutor.picture }}" />
+			</div>
+			<div class="info-main">
+				<h1 class="name">{{tutor.lname}}, {{tutor.fname}}</h1>
+				<h3 class="subject">{{tutor.gotofor}}</h3>
+				<h1 class="availability">{{tutor.availability}}<h1>
+			</div>
+			<div class="info-extra"></div>
+		</div>
+
+		{% endfor %}
+
+	</div>
+</div>
+
+	<div id="footer">
+	<div id="copyright">Tutor Associates</div>
+		<div id="footer-middle">
+			<span>&bull;&nbsp;&bull;&nbsp;&bull;&nbsp;</span>
+		</div>
+	</div>
+
+</body>
+
+</html>

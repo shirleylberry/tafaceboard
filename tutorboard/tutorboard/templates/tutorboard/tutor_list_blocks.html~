@@ -1,0 +1,38 @@
+{% extends "base.html" %}
+
+{% block filters %}
+<form action="" method="post">
+{{search_form}}
+{% csrf_token %}
+<input type="submit" value="search">
+</form>
+{% endblock %}
+
+
+
+{% block content %}
+<div id="tutorboard">
+		<div id="invis" class="tutor"></div>
+		{% for tutor in tutor_list %}
+
+		<div class="tutor math cornerstone" data-category="professional">
+			<div class="picture-area">
+				<img src="../media/{{ tutor.picture }}" />
+			</div>
+			<div class="info-main">
+				<h1 class="name">{{tutor.lname}}, {{tutor.fname}}</h1>
+				<h3 class="subject">{{tutor.gotofor}}</h3>
+				<h1 class="availability">{{tutor.availability}}<h1>
+			</div>
+			<div class="info-extra">
+			    	<h3 class="email">{{ tutor.email }}</h3>
+				<h3 class="cell">{{ tutor.cell }}</h3>
+				<h3 class="bioline">{{ tutor.bioline1 }}</h3>
+			</div>
+                        <a href='./{{ tutor.pk }}/update'> update </a>
+		</div>
+
+		{% endfor %}
+
+	</div>
+{% endblock %}

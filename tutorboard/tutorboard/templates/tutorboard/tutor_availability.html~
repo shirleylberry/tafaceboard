@@ -1,0 +1,39 @@
+{% extends "tutorboard/base.html" %}
+
+{% block content %}
+
+<style>
+.tutor-availability{
+    background-color:white;
+    padding:5px;
+    margin:5px;
+    display:inline-block;
+}
+.tutor-availability span{}
+.tutor-availability h1{
+    color:black;
+    display:inline;
+}
+</style>
+
+<div id="tutorlist">
+	<form action="" method="post">
+
+	{{ formset.management_form }}
+	{% csrf_token %}
+	    {% for form in formset %}
+		{{ form.id }}
+		<div class="tutor-availability">
+		    <h1 class="name">{{ form.fname.value|default_if_none:"" }} {{ form.lname.value|default_if_none:"" }}</h1>
+			{{ form.fname.as_hidden }}
+			{{ form.lname.as_hidden }}
+		    <span>{{ form.availability }}</span>
+		</div>
+		<br />
+	    {% endfor %}
+
+
+	<input type="submit" value="update">
+	</form>
+</div>
+{% endblock %}

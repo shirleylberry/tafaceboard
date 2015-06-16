@@ -11,7 +11,7 @@ from django.core.context_processors import csrf
 from django.views.generic.base import View
 from django.db.models import Q
 
-from tutorboard.models import Tutor, Capability, Subject, Energy, Skill, Presence, Archetype, Location, Style, LevelPreference, StudentEngagement, SubjectUpdate
+from tutorboard.models import Tutor, Capability, Subject, SubjectUpdate
 from .forms import SearchForm, TutorForm, CapabilityForm, AvailabilityForm, SubjectForm
 
 # downloaded from djangosnippets.com[942]

@@ -1,5 +1,4 @@
 from django.db import models
-from datetime import datetime
 
 LEVEL = (
     ('no', 'No'),
@@ -15,7 +14,6 @@ GENDER = (
     ('female', 'Female'),
     ('na', 'N/A'),
 )
-
 
 AREA = (
     ('math', 'Math'),
@@ -39,7 +37,6 @@ HIREDFOR = (
     ('latin', 'Latin'),
 )
 
-
 PROFDEV = (
     ('arttutoring', 'The Art of Tutoring'),
     ('deeperrelationships', 'Building Deeper Relationships'),
@@ -53,11 +50,10 @@ PROFDEV = (
 
 
 class Subject(models.Model):
-
     name = models.CharField(max_length=255, blank=True)
     image = models.ImageField(upload_to='images/icons/', blank=True, null=True)
 
-    is_ap = models.BooleanField(default = False)
+    is_ap = models.BooleanField(default=False)
     imageAP = models.ImageField(upload_to='images/icons/', blank=True, null=True)
 
     def __unicode__(self):
@@ -68,10 +64,9 @@ class Subject(models.Model):
 
 
 class Tutor(models.Model):
-
     fname = models.CharField(max_length=255, blank=True)
     lname = models.CharField(max_length=255, blank=True)
-#Contact
+    # Contact
     cell = models.CharField(max_length=255, blank=True)
     altphone = models.CharField(max_length=255, blank=True)
     email = models.CharField(max_length=255, blank=True)
@@ -83,7 +78,7 @@ class Tutor(models.Model):
     zip = models.CharField(max_length=255, blank=True)
     neighborhood = models.CharField(max_length=255, blank=True)
     hidden = models.BooleanField(default=False)
-#Bio
+    # Bio
     gotofor = models.CharField(max_length=255, blank=True)
     highestLevel = models.CharField(max_length=255, blank=True)
     highestLevelManual = models.CharField(max_length=255, blank=True, choices=LEVEL)
@@ -92,13 +87,13 @@ class Tutor(models.Model):
     bioline3 = models.CharField(max_length=255, blank=True)
     bioline4 = models.CharField(max_length=255, blank=True)
     bioline5 = models.CharField(max_length=255, blank=True)
-#Descriptors
+    # Descriptors
     gender = models.CharField(max_length=255, choices=GENDER, blank=True)
     area = models.CharField(max_length=255, choices=AREA, default=AREA[1][0], blank=True)
     availability = models.IntegerField(default=0, blank=True)
     availability_note = models.TextField(blank=True)
     availability_vacation = models.TextField(blank=True)
-    availability_updated = models.DateTimeField(auto_now=True, blank = True, null = True)
+    availability_updated = models.DateTimeField(auto_now=True, blank=True, null=True)
     picture = models.ImageField(upload_to='images/', blank=True, null=True)
 
     def __unicode__(self):
@@ -109,20 +104,21 @@ class Tutor(models.Model):
 
 
 class Capability(models.Model):
-
     level = models.CharField(max_length=255, choices=LEVEL, default='NO')
     level_note = models.TextField(blank=True)
     score = models.PositiveSmallIntegerField(default=0, blank=True)
 
-    area = models.ChoiceField(choices = AREA, blank = True)
+    area = models.CharField(max_length=255, choices=AREA, blank=True, default="")
     notes = models.TextField(blank=True)
 
     subject = models.ForeignKey(Subject)
-    tutor = models.ForeignKey(Tutor) 
-    
+    tutor = models.ForeignKey(Tutor)
+
     def __unicode__(self):
         return self.tutor.lname + " - " + self.subject.name
-# 
+
+
+#
 # End of Database Models
 # 
 

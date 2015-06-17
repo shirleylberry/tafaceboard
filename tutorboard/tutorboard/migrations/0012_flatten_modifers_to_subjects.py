@@ -7,10 +7,274 @@ from django.db import models
 class Migration(DataMigration):
 
     def forwards(self, orm):
-        "Write your forwards methods here."
-        # Note: Don't use "from appname.models import ModelName". 
-        # Use orm.ModelName to refer to models in this application,
-        # and orm['appname.ModelName'] for models in other applications.
+
+        old_subs = orm.Subject.objects.all()
+
+        sub1 = orm.Subject.objects.create(name='SSAT Math')
+        sub2 = orm.Subject.objects.create(name='ISEE Math')
+        sub3 = orm.Subject.objects.create(name='SHSAT Math')
+        sub4 = orm.Subject.objects.create(name='SAT Math')
+        sub5 = orm.Subject.objects.create(name='ACT Math & Science')
+        sub6 = orm.Subject.objects.create(name='SAT Level I Math')
+        sub7 = orm.Subject.objects.create(name='SAT Level II Math')
+        sub8 = orm.Subject.objects.create(name='Algebra / Trigonometry')
+        sub9 = orm.Subject.objects.create(name='Geometry')
+        sub10 = orm.Subject.objects.create(name='Pre-calculus')
+        sub11 = orm.Subject.objects.create(name='Calculus')
+        sub12 = orm.Subject.objects.create(name='AP Calculus AB')
+        sub13 = orm.Subject.objects.create(name='AP Calculus BC')
+        sub14 = orm.Subject.objects.create(name='Statistics')
+        sub16 = orm.Subject.objects.create(name='Academic Biology')
+        sub17 = orm.Subject.objects.create(name='AP Biology')
+        sub19 = orm.Subject.objects.create(name='Academic Chemistry')
+        sub20 = orm.Subject.objects.create(name='AP Chemistry')
+        sub22 = orm.Subject.objects.create(name='Academic Physics')
+        sub23 = orm.Subject.objects.create(name='AP Physics')
+        sub25 = orm.Subject.objects.create(name='SSAT Verbal')
+        sub26 = orm.Subject.objects.create(name='ISEE Verbal')
+        sub27 = orm.Subject.objects.create(name='SHSAT Verbal')
+        sub28 = orm.Subject.objects.create(name='SAT Verbal')
+        sub29 = orm.Subject.objects.create(name='ACT Verbal')
+        sub33 = orm.Subject.objects.create(name='Academic Writing & Grammar')
+        sub34 = orm.Subject.objects.create(name='Reading Skills')
+        sub36 = orm.Subject.objects.create(name='Academic US History')
+        sub37 = orm.Subject.objects.create(name='Academic World History')
+        sub38 = orm.Subject.objects.create(name='Academic European History')
+        sub39 = orm.Subject.objects.create(name='AP Literature & Composition')
+        sub40 = orm.Subject.objects.create(name='AP Language & Composition')
+        sub41 = orm.Subject.objects.create(name='AP US History')
+        sub42 = orm.Subject.objects.create(name='AP World History')
+        sub43 = orm.Subject.objects.create(name='AP European History')
+        sub47 = orm.Subject.objects.create(name='Academic French')
+        sub48 = orm.Subject.objects.create(name='AP French')
+        sub49 = orm.Subject.objects.create(name='Academic Spanish')
+        sub50 = orm.Subject.objects.create(name='AP Spanish')
+        sub51 = orm.Subject.objects.create(name='Academic Latin')
+        sub52 = orm.Subject.objects.create(name='AP Latin')
+
+        # Unused
+        sub35 = orm.Subject.objects.create(name='St. Bernard’s & Buckley Grammar') # unused
+        sub15 = orm.Subject.objects.create(name='Economics') # unused
+
+        # From Skills
+        sub53 = orm.Subject.objects.create(name='Application Essays')
+        sub54 = orm.Subject.objects.create(name='International')
+        sub55 = orm.Subject.objects.create(name='Skype')
+        sub56 = orm.Subject.objects.create(name='Schoology')
+        sub57 = orm.Subject.objects.create(name='TOEFL')
+        sub58 = orm.Subject.objects.create(name='LD')
+
+        # SAT subject tests
+        sub44 = orm.Subject.objects.create(name='SAT French')
+        sub45 = orm.Subject.objects.create(name='SAT Spanish')
+        sub46 = orm.Subject.objects.create(name='SAT Latin')
+        sub30 = orm.Subject.objects.create(name='SAT Literature')
+        sub31 = orm.Subject.objects.create(name='SAT US History')
+        sub32 = orm.Subject.objects.create(name='SAT World History')
+        sub24 = orm.Subject.objects.create(name='SAT Physics')
+        sub21 = orm.Subject.objects.create(name='SAT Chemistry')
+        sub18 = orm.Subject.objects.create(name='SAT Biology')
+
+        tutors = orm.Tutor.objects.all()
+
+        for tutor in tutors:
+
+            energy_text = ''
+            energy = tutor.energy.all()
+            for e in energy:
+                if energy_text:
+                    energy_text += ', '
+                energy_text += e.energy
+
+            presence_text = ''
+            presence = tutor.presence.all()
+            for p in presence:
+                if presence_text:
+                    presence_text += ', '
+                presence_text += p.presence
+
+            archetype_text = ''
+            archetype = tutor.archetype.all()
+            for a in archetype:
+                if archetype_text:
+                    archetype_text += ', '
+                archetype_text += a.archetype
+
+            location_text = ''
+            location = tutor.location.all()
+            for l in location:
+                if location_text:
+                    location_text += ', '
+                location_text += l.location
+
+            styles_text = ''
+            styles = tutor.styles.all()
+            for s in styles:
+                if styles_text:
+                    styles_text += ', '
+                styles_text += s.style
+
+            level_preferences_text = ''
+            levelPreferences = tutor.levelPreferences.all()
+            for l in levelPreferences:
+                if level_preferences_text:
+                    level_preferences_text += ', '
+                level_preferences_text += l.levelPref
+
+            student_engagements_text = ''
+            studentEngagements = tutor.studentEngagements.all()
+            for s in studentEngagements:
+                if student_engagements_text:
+                    student_engagements_text += ', '
+                student_engagements_text += s.studentName
+
+            skills_text = ''
+            skills = tutor.skills.all()
+            for s in skills:
+                if skills_text:
+                    skills_text += ', '
+                skills_text += s.skill
+
+            notes_text = '\n###\n{"notes":{'
+
+            notes_text += '"energy":"' + energy_text + '",'
+            notes_text += '"skill":"' + skills_text + '",'
+            notes_text += '"presence":"' + presence_text + '",'
+            notes_text += '"archetype":"' + archetype_text + '",'
+            notes_text += '"location":"' + location_text + '",'
+            notes_text += '"style":"' + styles_text + '",'
+            notes_text += '"levelPreference":"' + level_preferences_text + '",'
+            notes_text += '"studentEngagement":"' + student_engagements_text + '"'
+
+            notes_text += '}}'
+
+            tutor.availability_note += notes_text
+
+            # Map subjects
+
+            caps = tutor.capability_set.all()
+            for cap in caps:
+
+                if 'subject' in cap.notes.lower():
+                    sub_test = True
+                else:
+                    sub_test = False
+
+                sub = cap.subject.first()
+
+                new_subs = []
+
+                # what sub is it?
+                if sub.name == 'Cornerstone Math':
+                    new_subs.append(sub1)
+                    new_subs.append(sub2)
+                    if cap.modifier1:
+                        new_subs.append(sub3)
+
+                elif sub.name == 'Cornerstone Verbal':
+                    new_subs.append(sub25)
+                    new_subs.append(sub26)
+                    if cap.modifier1:
+                        new_subs.append(sub27)
+
+                elif sub.name == 'Academic Math Lower':
+                    new_subs.append(sub8)
+                    if cap.modifier1:
+                        new_subs.append(sub9)
+
+                elif sub.name == 'Academic Math Upper':
+                    new_subs.append(sub10)
+                    new_subs.append(sub11)
+                    if cap.modifier1:
+                        new_subs.append(sub12)
+                    if cap.modifier2:
+                        new_subs.append(sub13)
+
+                elif sub.name == 'Academic Biology':
+                    new_subs.append(sub16)
+                    if cap.ap:
+                        new_subs.append(sub17)
+                    if sub_test:
+                        new_subs.append(sub18)
+
+                elif sub.name == 'Academic Chemistry':
+                    new_subs.append(sub19)
+                    if cap.ap:
+                        new_subs.append(sub20)
+                    if sub_test:
+                        new_subs.append(sub21)
+
+                elif sub.name == 'Academic Physics':
+                    new_subs.append(sub22)
+                    if cap.ap:
+                        new_subs.append(sub23)
+                    if sub_test:
+                        new_subs.append(sub24)
+
+                elif sub.name == 'Academic English':
+                    new_subs.append(sub34)
+                    if cap.modifier1:
+                        new_subs.append(sub33)
+                    if cap.ap:
+                        new_subs.append(sub39)
+                        new_subs.append(sub40)
+
+                elif sub.name == 'Academic History US':
+                    new_subs.append(sub36)
+                    if cap.ap:
+                        new_subs.append(sub41)
+                    if sub_test:
+                        new_subs.append(sub31)
+
+                elif sub.name == 'Academic History Euro/World':
+                    new_subs.append(sub37)
+                    new_subs.append(sub38)
+                    if cap.ap:
+                        new_subs.append(sub42)
+                        new_subs.append(sub43)
+                    if sub_test:
+                        new_subs.append(sub32)
+
+                elif sub.name == 'Academic Spanish':
+                    new_subs.append(sub49)
+                    if cap.ap:
+                        new_subs.append(sub50)
+                    if sub_test:
+                        new_subs.append(sub45)
+
+                elif sub.name == 'Academic French':
+                    new_subs.append(sub47)
+                    if cap.ap:
+                        new_subs.append(sub48)
+                    if sub_test:
+                        new_subs.append(sub44)
+
+                elif sub.name == 'Academic Latin':
+                    new_subs.append(sub51)
+                    if cap.ap:
+                        new_subs.append(sub52)
+                    if sub_test:
+                        new_subs.append(sub46)
+
+                elif sub.name == 'Echelon Math':
+                    new_subs.append(sub4)
+                    new_subs.append(sub5)
+                    if cap.modifier1:
+                        new_subs.append(sub6)
+                    if cap.modifier2:
+                        new_subs.append(sub7)
+
+                elif sub.name == 'Echelon Verbal':
+                    new_subs.append(sub28)
+                    new_subs.append(sub29)
+                    if cap.modifier1 or sub_test:
+                        new_subs.append(sub30)
+
+                elif sub.name == 'Statistics':
+                    new_subs.append(sub14)
+
+
+
 
     def backwards(self, orm):
         "Write your backwards methods here."

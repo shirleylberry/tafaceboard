@@ -254,7 +254,7 @@ class Migration(SchemaMigration):
 
         # Adding field 'Tutor.sex'
         db.add_column(u'tutorboard_tutor', 'sex',
-                      self.gf('django.db.models.fields.CharField')(default='F', max_length=255, blank=True),
+                      self.gf('django.db.models.fields.CharField')(default='M', max_length=255, blank=True),
                       keep_default=False)
 
         # Adding M2M table for field styles on 'Tutor'

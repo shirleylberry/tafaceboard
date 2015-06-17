@@ -46,22 +46,23 @@ $.ajaxSetup({
 
 $(document).ready(function () {
 
-    (function ($) {
-        $.fn.clickToggle = function (func1, func2) {
-            var funcs = [func1, func2];
-            this.data('toggleclicked', 0);
-            this.on('click',function () {
-                var data = $(this).data();
-                var tc = data.toggleclicked;
-                $.proxy(funcs[tc], this)();
-                data.toggleclicked = (tc + 1) % 2;
-            });
-            return this;
-        };
-    }(jQuery));
+
+    $.fn.clickToggle = function (func1, func2) {
+        var funcs = [func1, func2];
+        this.data('toggleclicked', 0);
+        this.on('click',function () {
+            var data = $(this).data();
+            var tc = data.toggleclicked;
+            $.proxy(funcs[tc], this)();
+            data.toggleclicked = (tc + 1) % 2;
+        });
+        return this;
+    };
+
+    $('.lazy-img').imageloader();
+
 
     var $container = $('#tutorboard');
-
     $container.isotope({
         itemSelector: '.tutor',
         layoutMode: 'masonry',
@@ -142,6 +143,7 @@ $(document).ready(function () {
             return false;
         });
 
+    // Search Submit
     $('#search-form').submit(function (e) {
         var formData = $(this).serialize();
         console.log(formData);

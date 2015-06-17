@@ -1,3 +1,4 @@
+{% load static from staticfiles %}
 {% for tutor in tutor_list %}
     <div class="tutor">
 
@@ -63,7 +64,7 @@
                     <div class="picture-overlay"></div>
                 {% endif %}
             </div>
-            <img src="{{ MEDIA_URL }}{{ tutor.picture }}" alt="tutor picture"/>
+            <img class="lazy-img" alt="{{ tutor.fname }} {{ tutor.lname }}" data-src="{{ MEDIA_URL }}{{ tutor.picture }}"/>
         </div>
 
         <div class="info-main">
@@ -77,12 +78,12 @@
 
             <div class="contact">
                 {% if tutor.highestLevelManual %}
-                    <img class="levelIcon" alt="level icon"
-                         src="{{ MEDIA_URL }}images/icons/Level_{{ tutor.highestLevelManual|capfirst }}.gif"
+                    <img class="levelIcon lazy-img" alt="level icon"
+                         data-src="{{ MEDIA_URL }}images/icons/Level_{{ tutor.highestLevelManual|capfirst }}.gif"
                     %}"/>
                 {% elif tutor.highestLevel %}
-                    <img class="levelIcon" alt="level icon"
-                         src="{{ MEDIA_URL }}images/icons/Level_{{ tutor.highestLevel|capfirst }}.gif" %}" />
+                    <img class="levelIcon lazy-img" alt="level icon"
+                          data-src="{{ MEDIA_URL }}images/icons/Level_{{ tutor.highestLevel|capfirst }}.gif" %}" />
                 {% endif %}
 
 
@@ -100,20 +101,20 @@
                 {% for cap in tutor.capability_set.all %}
 
                     {% if cap.modifier1 and cap.subject.imageMod1 %}
-                        <img class="icon {{ cap.subject.name|slugify }}"
-                             src="{{ MEDIA_URL }}{{ cap.subject.imageMod1 }}" alt="capability icon">
+                        <img class="lazy-img icon {{ cap.subject.name|slugify }}"
+                             data-src="{{ MEDIA_URL }}{{ cap.subject.imageMod1 }}" alt="capability icon">
                     {% elif cap.modifier2 and cap.subject.imageMod2 %}
-                        <img class="icon {{ cap.subject.name|slugify }}"
-                             src="{{ MEDIA_URL }}{{ cap.subject.imageMod2 }}" alt="capability icon">
+                        <img class="lazy-img icon {{ cap.subject.name|slugify }}"
+                              data-src="{{ MEDIA_URL }}{{ cap.subject.imageMod2 }}" alt="capability icon">
                     {% elif cap.modifier1 and cap.modifier2 and cap.subject.imageMod3 %}
-                        <img class="icon {{ cap.subject.name|slugify }}"
-                             src="{{ MEDIA_URL }}{{ cap.subject.imageMod3 }}" alt="capability icon">
+                        <img class="lazy-img icon {{ cap.subject.name|slugify }}"
+                              data-src="{{ MEDIA_URL }}{{ cap.subject.imageMod3 }}" alt="capability icon">
                     {% elif cap.ap and cap.subject.imageAP %}
-                        <img class="icon {{ cap.subject.name|slugify }}"
-                             src="{{ MEDIA_URL }}{{ cap.subject.imageAP }}" alt="capability icon">
+                        <img class="lazy-img icon {{ cap.subject.name|slugify }}"
+                              data-src="{{ MEDIA_URL }}{{ cap.subject.imageAP }}" alt="capability icon">
                     {% else %}
-                        <img class="icon {{ cap.subject.name|slugify }}"
-                             src="{{ MEDIA_URL }}{{ cap.subject.image }}" alt="capability icon">
+                        <img class="lazy-img icon {{ cap.subject.name|slugify }}"
+                              data-src="{{ MEDIA_URL }}{{ cap.subject.image }}" alt="capability icon">
                     {% endif %}
                     <div class="subject-description-container">
                         <div class="subject-description">
@@ -153,13 +154,13 @@
             {% endif %}
             <div class="personality">
                 {% for archetype in tutor.archetype.all %}
-                    <div><img src="{{ MEDIA_URL }}{{ archetype.image }}" alt="archetype"></div>
+                    <div><img class="lazy-img" data-src="{{ MEDIA_URL }}{{ archetype.image }}" alt="archetype"></div>
                 {% endfor %}
                 {% for energy in tutor.energy.all %}
-                    <div><img src="{{ MEDIA_URL }}{{ energy.image }}" alt="energy"></div>
+                    <div><img class="lazy-img" data-src="{{ MEDIA_URL }}{{ energy.image }}" alt="energy"></div>
                 {% endfor %}
                 {% for presence in tutor.presence.all %}
-                    <div><img src="{{ MEDIA_URL }}{{ presence.image }}" alt="presence"></div>
+                    <div><img class="lazy-img" data-src="{{ MEDIA_URL }}{{ presence.image }}" alt="presence"></div>
                 {% endfor %}
             </div>
             {% if tutor.availability_note %}

@@ -9,7 +9,7 @@ from django.template import RequestContext
 from django.views.generic.base import View
 from django.db.models import Q
 
-from tutorboard.models import Tutor, Capability, Subject, SubjectUpdate
+from tutorboard.models import Tutor, Capability, Subject, SubjectUpdate, LEVEL, GENDER, AREA, HIREDFOR, PROFDEV
 from .forms import SearchForm, TutorForm, CapabilityForm, AvailabilityForm, SubjectForm
 
 
@@ -52,15 +52,7 @@ class TutorView(View):
 
         tutors = tutors.distinct()
         tutors.prefetch_related(
-            'capability_set__subject',
-            'energy',
-            'presence',
-            'archetype',
-            'location',
-            'styles',
-            'levelPreferences',
-            'skills',
-            'archetype')
+            'capability_set__subject',)
 
         context = RequestContext(request, {'tutor_list': tutors})
         return render(request, self.template_name, context)
@@ -69,15 +61,8 @@ class TutorView(View):
 class AllTutorView(TutorView):  # include hidden tutors
     def get(self, request, *args, **kwargs):
         tutor_list = Tutor.objects.prefetch_related(
-            'capability_set__subject',
-            'energy',
-            'presence',
-            'archetype',
-            'location',
-            'styles',
-            'levelPreferences',
-            'skills',
-            'archetype').all()
+            'capability_set__subject',).all()
+
 
         searchForm = SearchForm()
 
@@ -92,32 +77,22 @@ class TutorViewWithFilterMenu(View):
 
     def get(self, request, *args, **kwargs):
         tutor_list = Tutor.objects.prefetch_related(
-            'capability_set__subject',
-            'energy',
-            'presence',
-            'archetype',
-            'location',
-            'styles',
-            'levelPreferences',
-            'skills',
-            'archetype').all().exclude(hidden=True)
+            'capability_set__subject',).all().exclude(hidden=True)
 
         subject_list = Subject.objects.all()
         area_list = ['Math', 'Verbal']
         program_list = ['Echelon', 'Cornerstone', 'Academic']
-        gender_list = ['Male', 'Female', 'Other']
         level_list = ['Trained', 'Professional', 'Endorsed', 'Expert', 'Director']
 
         searchForm = SearchForm()
 
-        context = RequestContext(request, {'tutor_list': tutor_list,
-                                           'subject_list': subject_list,
-                                           'area_list': area_list,
-                                           'program_list': program_list,
-                                           'gender_list': gender_list,
-                                           'level_list': level_list,
-
-                                           'search_form': searchForm})
+        context = RequestContext (request, {'tutor_list' : tutor_list,
+                                  'subject_list': subject_list,
+                                  'area_list': AREA,
+                                  'program_list': program_list,
+                                  'gender_list': GENDER,
+                                  'level_list': LEVEL,
+                                  'search_form':searchForm})
         return render(request, self.template_name, context)
 
 
@@ -177,7 +152,8 @@ def update_tutor(request, tutor_id):
             else:
                 redirectToTutor = '0'
 
-            success = "Tutor Saved"
+
+            success= "Tutor Saved"
             return HttpResponseRedirect('/tutorboard/' + redirectToTutor + '/update/')
         else:
             print("Form Invalid.  Tutor not saved.")

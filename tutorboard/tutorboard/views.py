@@ -8,6 +8,9 @@ from django.forms.models import modelformset_factory
 from django.template import RequestContext
 from django.views.generic.base import View
 from django.db.models import Q
+from rest_framework.renderers import JSONRenderer
+from rest_framework.parsers import JSONParser
+from serializers import CapabilitySerializer
 
 from tutorboard.models import Tutor, Capability, Subject, SubjectUpdate, LEVEL, GENDER, AREA, HIREDFOR, PROFDEV
 from .forms import SearchForm, TutorForm, CapabilityForm, AvailabilityForm, SubjectForm

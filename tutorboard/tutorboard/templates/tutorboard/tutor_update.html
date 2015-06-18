@@ -1,82 +1,46 @@
 {% extends "tutorboard/base.html" %}
+{% load staticfiles %}
 {% load custom_tags %}
+
+{% block html_class %}{{ block.super }} tutor_update {% endblock %}
+
+{% block django_context_data %}
+    {{ block.super }}
+    django_context.tutor_id = {{ tutor.id }};
+{% endblock %}
 
 {% block content %}
 
-{{ success }}
+    {{ success }}
 
-<div id="tutor-update">
+    <div id="tutor-update">
 
-<div class="update-info">
-<form method="post" action="">
-
-     
-    {% for field in tutor_form %}    
-        
-        <div class="update-info-unit"
-            {% if field|is_textarea %}style="display:block;"{% endif %}
-            {% if field|is_upload%}style="display:block;"{% endif %}
-        >
-        {% if field|is_upload %}
-           <img class="update-img" src="/media/{{field.value}}" alt="tutor picture" />
-        {% endif %}
-            {% if field.field.is_hidden %}
-            {% else %}
-                <div>{{ field.label_tag }}</div>
-            {% endif %}
-            {{ field }}        
-        </div>
-        
-        
-    {% endfor %}           
+        <div class="update-info">
+            <form method="post" action="">
 
 
-    {% csrf_token %}
+                {% for field in form %}
 
-    
-    <input type="submit" name="save" value="save">
-    
-    {% if next_tutor %}
-    <input type="submit" name="saveAndNext" value="save and next">
-    {% endif %}
+                    <div class="update-info-unit"
+                         {% if field|is_textarea %}style="display:block;"{% endif %}
+                         {% if field|is_upload %}style="display:block;"{% endif %}
+                            >
+                        {% if field|is_upload %}
+                            <img class="update-img" src="/media/{{ field.value }}" alt="tutor picture"/>
+                        {% endif %}
+                        {% if field.field.is_hidden %}
+                        {% else %}
+                            <div>{{ field.label_tag }}</div>
+                        {% endif %}
+                        {{ field }}
+                    </div>
 
-</form>
 
-{% if tutor_id != '0' %}
+                {% endfor %}
 
-<script>
 
-// From django docs for ajax post with CSRF
+                {% csrf_token %}
 
-function getCookie(name) {
-    var cookieValue = null;
-    if (document.cookie && document.cookie != '') {
-        var cookies = document.cookie.split(';');
-        for (var i = 0; i < cookies.length; i++) {
-            var cookie = jQuery.trim(cookies[i]);
-            // Does this cookie string begin with the name we want?
-            if (cookie.substring(0, name.length + 1) == (name + '=')) {
-                cookieValue = decodeURIComponent(cookie.substring(name.length + 1));
-                break;
-            }
-        }
-    }
-    return cookieValue;
-}
-var csrftoken = getCookie('csrftoken');
-
-function csrfSafeMethod(method) {
-    // these HTTP methods do not require CSRF protection
-    return (/^(GET|HEAD|OPTIONS|TRACE)$/.test(method));
-}
-$.ajaxSetup({
-    crossDomain: false, // obviates need for sameOrigin test
-    beforeSend: function(xhr, settings) {
-        if (!csrfSafeMethod(settings.type)) {
-            xhr.setRequestHeader("X-CSRFToken", csrftoken);
-        }
-    }
-});
 
                 <input type="submit" name="save" value="save">
 
@@ -88,44 +52,30 @@ $.ajaxSetup({
 
             {% if tutor_id != '0' %}
 
-function fixPhoneNumber(){
-    var newnum = new String();
-    var rawnum = $(this).val();
-    rawnum = rawnum.replace(/[\D]/g,'');
-    if (rawnum.length != 10){
-        alert("Please enter a 10-digit phone number")
-    }
-    else{
-        newnum=newnum.concat(rawnum.substr(0,3),".",rawnum.substr(3,3),".",rawnum.substr(6,4));
-        $(this).val(newnum);
-    }
-}
 
 
+                <!-- Subject checklist partial view -->
+                <div id="subjectList"><img src="{% static "img/spinner.gif" %}"></div>
+                <!-- End of subject checklist partial view -->
 
-<!-- Subject checklist partial view -->
-<div id="subjectList"><img src="/media/images/spinner.gif"></div>
-<!-- End of subject checklist partial view -->
+                {% if prev_tutor %}
+                    <span class="next-button"><a href="{% url 'update' prev_tutor.id %}">Edit previous
+                        tutor: {{ prev_tutor.fname }} {{ prev_tutor.lname }}</a></span>
+                {% endif %}
 
-{% if prev_tutor %}
-<span class="next-button"><a href="/tutorboard/{{ prev_tutor.id }}/update">Edit previous tutor: {{ prev_tutor.fname }} {{ prev_tutor.lname }}</a></span>
-{% endif %}
+                {% if next_tutor %}
+                    <span class="next-button"><a href="{% url 'update' next_tutor.id %}">Edit next
+                        tutor: {{ next_tutor.fname }} {{ next_tutor.lname }}</a></span>
+                {% endif %}
 
-{% if next_tutor %}
-<span class="next-button"><a href="/tutorboard/{{ next_tutor.id }}/update">Edit next tutor: {{ next_tutor.fname }} {{ next_tutor.lname }}</a></span>
-{% endif %}
+            {% else %}
+                <div style="margin-left:10px;"><h2>In order to add capabilities to this tutor please click save first
+                    and then click update on this tutor's card</h2></div>
 
-{% else %}
-<div style="margin-left:10px;"><h2>In order to add capabilities to this tutor please click save first and then click update on this tutor's card</h2></div>
-
-{% endif %} <!-- end for loop condition if tutor_id -->
-</div>
-        <div class = "errors">{{ form_errors }}</div>
-</div>
-<br>
-<br>
-<br>
-<br>
-<br>
-<br>
+            {% endif %} <!-- end for loop condition if tutor_id -->
+        </div>
+        <div class="errors">{{ form_errors }}</div>
+    </div>
 {% endblock %}
+
+

@@ -157,7 +157,7 @@
             {% endif %}
         </div>
 
-        <a class="update" href='./{{ tutor.pk }}/update'> update </a>
+        <a class="update" href='{% url 'update' tutor.pk %}'> update </a>
 
         <div class="hide-button"><img src='{{ STATIC_URL }}img/hideTutorButton.jpg' alt="hide tutor"/>
         </div>

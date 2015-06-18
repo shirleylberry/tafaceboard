@@ -1,105 +1,100 @@
 
 
 {% block subjectUpdate %}
-    {% for subUpdate in model %}
-    
-            
+    {% for sub_update in model %}
+
         <div class="subject-update-model">
-            {% if subUpdate.capability %}
+            {% if sub_update.capability %}
 
-                <label for="checkSub{{subUpdate.subject.id}}">
-                    <input 
-                        type="checkbox" 
-                        class="checkboxSub" 
-                        id="checkSub{{subUpdate.subject.id}}" 
-                        name="{{subUpdate.subject.name}}"
-                        checked="checked"/>
-                    {{subUpdate.subject.name}}
+                <label for="checkSub{{ sub_update.subject.id }}">
+                    <input
+                            type="checkbox"
+                            class="checkboxSub"
+                            id="checkSub{{ sub_update.subject.id }}"
+                            name="{{ sub_update.subject.name }}"
+                            checked="checked"/>
+                    {{ sub_update.subject.name }}
                 </label>
-                <input 
-                    type="hidden" 
-                    class="hiddenSub" 
-                    name="{{subUpdate.subject.name}}" 
-                    value="{{subUpdate.subject.id}}"/>
-                <input 
-                    type="hidden" 
-                    class="hiddenCap" 
-                    name="capability" 
-                    value="{{subUpdate.capability.id}}"/>
+                <input type="hidden" class="hiddenSub" name="{{ sub_update.subject.name }}" value="{{ sub_update.subject.id }}"/>
+                <input type="hidden" class="hiddenCap" name="capability" value="{{ sub_update.capability.id }}"/>
                 <span class="checkResult"></span>
-            
-            
-                <div id="capability-form-{{subUpdate.capability_form.id}}" class="capability-form checkResult">
-	                <form action="" method="post">
-	                {% csrf_token %}
 
-	                {{ subUpdate.capability_form.id }}
-	                {{ subUpdate.capability_form.errors }}
-                    {{ subUpdate.capability_form.non_field_errors }}
-	                
-	                {{ subUpdate.capability_form.tutor.as_hidden }}
-	                {{ subUpdate.capability_form.subject.as_hidden }}
-	                {{subUpdate.capability_form.modifier.as_hidden }}
-	                
-	                <input 
-                    type="hidden" 
-                    class="hiddenCap" 
-                    name="capability_id_manual" 
-                    value="{{subUpdate.capability.id}}"/>
-                    
-                    <input 
-                    type="hidden" 
-                    class="hiddenSub" 
-                    name="subject_id_manual" 
-                    value="{{subUpdate.subject.id}}"/>
-	                
-	                <span class="subUpdate-field">Level: {{subUpdate.capability_form.level}}</span>
-	                <span class="subUpdate-field">AP: {{subUpdate.capability_form.ap}}</span>
-	                <span class="subUpdate-field">Score: {{subUpdate.capability_form.score}}</span>
-	                
-	                {% if subUpdate.subject.modifier1 %}
-	                <span class="subUpdate-field">
-    	                {{subUpdate.subject.modifier1}}: {{subUpdate.capability_form.modifier1}}
+
+                <div id="capability-form-{{ sub_update.capability_form.id }}" class="capability-form checkResult">
+                    <form action="" method="post">
+                        {% csrf_token %}
+
+                        {{ sub_update.capability_form.id }}
+                        {{ sub_update.capability_form.errors }}
+                        {{ sub_update.capability_form.non_field_errors }}
+
+                        {{ sub_update.capability_form.tutor.as_hidden }}
+                        {{ sub_update.capability_form.subject.as_hidden }}
+                        {{ sub_update.capability_form.modifier.as_hidden }}
+
+                        <input
+                                type="hidden"
+                                class="hiddenCap"
+                                name="capability_id_manual"
+                                value="{{ sub_update.capability.id }}"/>
+
+                        <input
+                                type="hidden"
+                                class="hiddenSub"
+                                name="subject_id_manual"
+                                value="{{ sub_update.subject.id }}"/>
+
+                        <span class="sub_update-field">Level: {{ sub_update.capability_form.level }}</span>
+                        <span class="sub_update-field">AP: {{ sub_update.capability_form.ap }}</span>
+                        <span class="sub_update-field">Score: {{ sub_update.capability_form.score }}</span>
+
+                        {% if sub_update.subject.modifier1 %}
+                            <span class="sub_update-field">
+    	                {{ sub_update.subject.modifier1 }}: {{ sub_update.capability_form.modifier1 }}
     	                </span>
-	                {% endif %}
-	                
-	                {% if subUpdate.subject.modifier2 %}
-	                <span class="subUpdate-field">
-	                    {{subUpdate.subject.modifier2}}: {{subUpdate.capability_form.modifier2}}
+                        {% endif %}
+
+                        {% if sub_update.subject.modifier2 %}
+                            <span class="sub_update-field">
+	                    {{ sub_update.subject.modifier2 }}: {{ sub_update.capability_form.modifier2 }}
 	                    </span>
-	                {% endif %}
-	                
-                    {% if subUpdate.subject.modifier3 %}
-                    <span class="subUpdate-field">
-	                    {{subUpdate.subject.modifier3}}: {{subUpdate.capability_form.modifier3}}
+                        {% endif %}
+
+                        {% if sub_update.subject.modifier3 %}
+                            <span class="sub_update-field">
+	                    {{ sub_update.subject.modifier3 }}: {{ sub_update.capability_form.modifier3 }}
 	                    </span>
-                    {% endif %}
-                    
-	                {% if subUpdate.subject.modifier4 %}
-	                <span class="subUpdate-field">
-	                    {{subUpdate.subject.modifier4}}: {{subUpdate.capability_form.modifier4}}
+                        {% endif %}
+
+                        {% if sub_update.subject.modifier4 %}
+                            <span class="sub_update-field">
+	                    {{ sub_update.subject.modifier4 }}: {{ sub_update.capability_form.modifier4 }}
 	                    </span>
-                    {% endif %}
-	                <a class="subUpdateSubmit" href="#">[save]</a>
-                    <span class="subUpdate-field">{{json_result|safe}}</span>
-                    <div class="subUpdateNotes">
-                        <span class="subUpdate-field">Notes: {{subUpdate.capability_form.notes}}</span>
-                    </div>
-	                </form>
+                        {% endif %}
+                        <a class="sub_updateSubmit" href="#">[save]</a>
+                        <span class="sub_update-field">{{ json_result|safe }}</span>
+
+                        <div class="sub_updateNotes">
+                            <span class="sub_update-field">Notes: {{ sub_update.capability_form.notes }}</span>
+                        </div>
+                    </form>
                 </div>
             {% else %}
-                    <label for="checkSub{{subUpdate.subject.id}}">
-                        <input 
-                            type="checkbox" 
-                            class="checkboxSub" 
-                            id="checkSub{{subUpdate.subject.id}}" 
-                            name="{{subUpdate.subject.name}}"/>
-                        {{subUpdate.subject.name}}
-                    </label>
-                    <input type="hidden" class="hiddenSub" name="{{subUpdate.subject.name}}" value="{{subUpdate.subject.id}}"/>
-                    <span class="checkResult"></span>
+
+                <label for="checkSub{{ sub_update.subject.id }}">
+                    <input
+                            type="checkbox"
+                            class="checkboxSub"
+                            id="checkSub{{ sub_update.subject.id }}"
+                            name="{{ sub_update.subject.name }}"/>
+                    {{ sub_update.subject.name }}
+                </label>
+                <input type="hidden" class="hiddenSub" name="{{ sub_update.subject.name }}"
+                       value="{{ sub_update.subject.id }}"/>
+                <span class="checkResult"></span>
+
             {% endif %}
-      
+
 
         </div>
     {% endfor %}

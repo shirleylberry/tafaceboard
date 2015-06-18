@@ -2,15 +2,17 @@
 
 {% load staticfiles %}
 
-<html>
+<html class="{% block html_class %}{% endblock %}">
 <head>
-	<title>TA Tutorboard</title>
+	<title>{% block page_title %}TA Tutorboard{% endblock %}</title>
     <meta name="viewport" content="width=device-width, user-scalable=yes">
 
-	<link rel="stylesheet" type="text/css" href="{% static "css/reset.css" %}" >
-    <link rel="stylesheet" type="text/css" href="{% static "css/jquery-ui.css" %}" />
-	<link href='http://fonts.googleapis.com/css?family=Lato:100,400,900,900italic' rel='stylesheet' type='text/css'>
-	<link rel="stylesheet" type="text/css" href="{% static "css/style.css" %}" >
+    {% block css_files %}
+        <link rel="stylesheet" type="text/css" href="{% static "css/reset.css" %}" >
+        <link rel="stylesheet" type="text/css" href="{% static "css/jquery-ui.css" %}" />
+        <link href='http://fonts.googleapis.com/css?family=Lato:100,400,900,900italic' rel='stylesheet' type='text/css'>
+        <link rel="stylesheet" type="text/css" href="{% static "css/style.css" %}" >
+    {% endblock %}
 
 </head>
 
@@ -21,57 +23,45 @@
             
 		</div>
 		<div id="header-right">
-			<div id="btn-sort">
-                <a class="btn-link header-button" href="/tutorboard/availability">Update Hours</a>
-
-                <a class="btn-link header-button" href="/tutorboard/0/update">Create Tutor</a>
-                <span class = "separator"> | </span>
-				<a class="btn-sort header-button" href="#name">Name
-				    <span class='arrowUp'>&and;</span><span class='arrowDown'>&or;</span>
-				</a>
-				
-				<a class="btn-sort header-button" href="#availability">Availability
-				    <span class='arrowUp'>&and;</span><span class='arrowDown'>&or;</span>
-				</a>
-				
-				<a class="btn-sort header-button" href="#level">Level
-				    <span class='arrowUp'>&and;</span><span class='arrowDown'>&or;</span>
-				</a>
-				
-				<a class="btn-sort header-button" href="#magic">Magic
-				    <span class='arrowUp'>&and;</span><span class='arrowDown'>&or;</span>
-				</a>
-				
-			</div>
-            <div id="search-container">
-                <form id="search-form" method="post" action=".">
-                    <input name="search" type="text" id="searchbar">
-                    <input type="submit" value="Go">
-                </form>
-            </div>
+            {% block header_right %}{% endblock %}
 		</div>
 	</div>
 
-<script src="{% static "js/jquery.js" %}"></script>
-<script src="{% static "js/jquery.min.js" %}"></script>
-<script src="{% static "js/jquery-ui.min.js" %}"></script>
-<script src="{% static "js/isotope.min.js" %}"></script>
-<script src="{% static "js/concept.js" %}"></script>
-<script src="{% static "js/expand.js" %}"></script>
-<script src="{% static "js/filters.js" %}"></script>
-<script src="{% static "js/imageloader.js" %}"></script>
 
-<div id="content-container">
-{% block content %}{% endblock %}
-</div>
+    <div id="content-container">
+        {% block content %}{% endblock %}
+    </div>
 
 	<div id="footer">
-	<div id="copyright">Tutor Associates</div>
+	    <div id="copyright">Tutor Associates</div>
 		<div id="footer-middle">
 			<span>&bull;&nbsp;&bull;&nbsp;&bull;&nbsp;</span>
 		</div>
 	</div>
 
+    <script>
+        var django_context = {};
+    {% block django_context_data %}{% endblock %}
+    </script>
+
+    {% block js_files %}
+
+        {# libraries #}
+        <script src="{% static "js/jquery.min.js" %}"></script>
+        <script src="{% static "js/jquery-ui.min.js" %}"></script>
+        <script src="{% static "js/isotope.min.js" %}"></script>
+        <script src="{% static "js/imageloader.js" %}"></script>
+
+        {# our js #}
+        <script src="{% static "js/global.js" %}"></script>
+        <script src="{% static "js/tutor_list.js" %}"></script>
+        <script src="{% static "js/tutor_update.js" %}"></script>
+        <script src="{% static "js/filters.js" %}"></script>
+
+    {% endblock %}
+
+    {% block extra_scripts %}
+    {% endblock %}
 
 </body>
 

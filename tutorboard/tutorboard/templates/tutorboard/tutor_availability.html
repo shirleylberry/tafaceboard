@@ -1,5 +1,13 @@
 {% extends "tutorboard/base.html" %}
+{% load staticfiles %}
 {% load custom_tags %}
+
+{% block html_class %}{{ block.super }} tutor_availability {% endblock %}
+
+{% block django_context_data %}
+    {{ block.super }}
+    django_context.tutor_id = {{ tutor_id }};
+{% endblock %}
 
 {% block content %}
 <div id="tutorlist" class = "avail-form">

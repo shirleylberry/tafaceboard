@@ -78,66 +78,15 @@ $.ajaxSetup({
     }
 });
 
-function checkboxChange() {
-        var $clickedCheckBox = $(this);
-        console.log($clickedCheckBox );
-        var $parentLabel = $clickedCheckBox.parent();
-        console.log($parentLabel);
-        var $checkResult = $parentLabel.nextAll(".checkResult");
-        var $subject_update_model = $parentLabel.parent(".subject-update-model");
-        console.log($subject_update_model);
+                <input type="submit" name="save" value="save">
 
-        subID = $parentLabel.nextAll(".hiddenSub").val();
-        if (! subID) {subID = -1;}
-        capID = $parentLabel.nextAll(".hiddenCap").val();
-        if (! capID) {capID = -1;}
+                {% if next_tutor %}
+                    <input type="submit" name="saveAndNext" value="save and next">
+                {% endif %}
 
-        var checkedAction = '';
+            </form>
 
-        if ($(this).is(":checked")){
-            checkedAction = 'checked';
-        }
-        else {
-            checkedAction = 'unchecked';
-        }
-
-        $($clickedCheckBox).replaceWith('<img src="/media/images/spinner.gif">');
-
-        var postData = { subjectID: subID, capabilityID: capID, checked: checkedAction };
-
-        $.post( "/tutorboard/{{tutor_id}}/update/ajax/subjectlist/", postData,  function( data ) {
-            $($subject_update_model).replaceWith( data );
-            //$('.checkboxSub').off();
-            //$('.checkboxSub').change(checkboxChange);
-            //$('.subUpdateSubmit').off();
-            //$('.subUpdateSubmit').click(subjectUpdateSubmit);
-        });
-}
-
-function subjectUpdateSubmit(event) {
-    // Do ajax submit
-    var $form = $(this).parent("form");
-
-    var subID = $form.parent(".capability-form").prevAll(".hiddenSub").val();
-    if (! subID) {subID = -1;}
-
-    var capID = $form.parent(".capability-form").prevAll(".hiddenCap").val();
-    if (! capID) {capID = -1;}
-
-    var checkedAction = '';
-
-    $(this).replaceWith('<img src="/media/images/spinner.gif">');
-
-    $.post("/tutorboard/{{tutor_id}}/update/ajax/subjectlist/", $form.serialize(), function(data){
-        $form.parent('.capability-form').parent('.subject_update_model').replaceWith(data);
-        $('.checkboxSub').off();
-        $('.checkboxSub').change(checkboxChange);
-        $('.subUpdateSubmit').off();
-        $('.subUpdateSubmit').click(subjectUpdateSubmit);
-    });
-  event.preventDefault();
-  return false;
-}
+            {% if tutor_id != '0' %}
 
 function fixPhoneNumber(){
     var newnum = new String();
@@ -152,18 +101,6 @@ function fixPhoneNumber(){
     }
 }
 
-$( document ).ready(function() {
-    $.get( "/tutorboard/{{tutor_id}}/update/ajax/subjectlist/", function( data ) {
-      $( "#subjectList" ).html( data );
-      $(document).on('change','.checkboxSub',checkboxChange);
-      $('.subUpdateSubmit').click(subjectUpdateSubmit);
-    });
-
-	$("#id_cell").blur(fixPhoneNumber);
-	$("#id_altphone").blur(fixPhoneNumber);
-
-});
-</script>
 
 
 <!-- Subject checklist partial view -->

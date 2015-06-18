@@ -1,13 +1,58 @@
 {% extends "tutorboard/base.html" %}
-{% load static from staticfiles %}
+{% load staticfiles %}
+
+{% block html_class %}{{ block.super }} tutor_list {% endblock %}
+
+{% block django_context_data %}
+    {{ block.super }}
+{% endblock %}
+
+{% block header_right %}
+    {% block sort_buttons %}
+        <div id="btn-sort">
+            <a class="btn-link header-button" href="/tutorboard/availability">Update Hours</a>
+
+            <a class="btn-link header-button" href="/tutorboard/0/update">Create Tutor</a>
+            <span class = "separator"> | </span>
+            <a class="btn-sort header-button" href="#name">Name
+                <span class='arrowUp'>&and;</span><span class='arrowDown'>&or;</span>
+            </a>
+
+            <a class="btn-sort header-button" href="#availability">Availability
+                <span class='arrowUp'>&and;</span><span class='arrowDown'>&or;</span>
+            </a>
+
+            <a class="btn-sort header-button" href="#level">Level
+                <span class='arrowUp'>&and;</span><span class='arrowDown'>&or;</span>
+            </a>
+
+            <a class="btn-sort header-button" href="#magic">Magic
+                <span class='arrowUp'>&and;</span><span class='arrowDown'>&or;</span>
+            </a>
+
+        </div>
+    {% endblock %}
+
+    {% block tutor_search_form %}
+        <div id="search-container">
+            <form id="search-form" method="post" action=".">
+                <input name="search" type="text" id="searchbar">
+                <input type="submit" value="Go">
+            </form>
+        </div>
+    {% endblock %}
+{% endblock %}
 
 {% block content %}
 
     <div id="filters">
 
         {% block filters %}
-            <span><a class="reset-all" href="#"><img class="reset" src="{% static "img/Reset_Button.png" %}"
-                                                     alt="reset"></a></span>
+            <span>
+                <a class="reset-all" href="#">
+                    <img class="reset" src="{% static "img/Reset_Button.png" %}" alt="reset">
+                </a>
+            </span>
             {% include "tutorboard/partials/filter_menu_rendered.html" %}
         {% endblock %}
 

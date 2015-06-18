@@ -10,9 +10,9 @@
 {% block header_right %}
     {% block sort_buttons %}
         <div id="btn-sort">
-            <a class="btn-link header-button" href="/tutorboard/availability">Update Hours</a>
+            <a class="btn-link header-button" href="{% url 'availability' %}">Update Hours</a>
 
-            <a class="btn-link header-button" href="/tutorboard/0/update">Create Tutor</a>
+            <a class="btn-link header-button" href="{% url 'create' %}">Create Tutor</a>
             <span class = "separator"> | </span>
             <a class="btn-sort header-button" href="#name">Name
                 <span class='arrowUp'>&and;</span><span class='arrowDown'>&or;</span>
@@ -62,7 +62,4 @@
         {% include 'tutorboard/partials/tutorboard.html' with tutor_list=tutor_list %}
     </div>
 
-    {% comment %}
-	<a id='create-tutor' href="/tutorboard/0/update"><img src="/media/images/create.png" alt="create tutor" style="position:absolute;top:59px;left:197px;"></a>
-	{% endcomment %}
 {% endblock %}

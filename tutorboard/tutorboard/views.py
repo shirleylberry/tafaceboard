@@ -1,13 +1,14 @@
 # tutorboard/views.py
 
 from django.core.exceptions import ObjectDoesNotExist, MultipleObjectsReturned
-from django.views.generic import CreateView
+from django.views.generic import CreateView, UpdateView
 from django.http import HttpResponseRedirect, HttpResponse
 from django.shortcuts import render, render_to_response
 from django.forms.models import modelformset_factory
 from django.template import RequestContext
 from django.views.generic.base import View
 from django.db.models import Q
+from django.core.urlresolvers import reverse
 
 from tutorboard.models import Tutor, Capability, Subject, SubjectUpdate, LEVEL, GENDER, AREA, HIREDFOR, PROFDEV
 from .forms import SearchForm, TutorForm, CapabilityForm, AvailabilityForm, SubjectForm
@@ -57,7 +58,6 @@ class TutorView(View):
         context = RequestContext(request, {'tutor_list': tutors})
         return render(request, self.template_name, context)
 
-
 class AllTutorView(TutorView):  # include hidden tutors
     def get(self, request, *args, **kwargs):
         tutor_list = Tutor.objects.prefetch_related(
@@ -69,7 +69,6 @@ class AllTutorView(TutorView):  # include hidden tutors
         context = RequestContext(request, {'tutor_list': tutor_list,
                                            'search_form': searchForm})
         return render(request, self.template_name, context)
-
 
 class TutorViewWithFilterMenu(View):
     tutor_list = []
@@ -95,94 +94,29 @@ class TutorViewWithFilterMenu(View):
                                   'search_form':searchForm})
         return render(request, self.template_name, context)
 
-
 class TutorCreate(CreateView):
+    template_name_suffix = '_create'
     model = Tutor
-    template_name = "tutorboard/tutor_create.html"
-    success_url = ".."
     form_class = TutorForm
+    context_object_name = 'tutor'
 
+    def get_success_url(self):
+        return reverse('update',args=(self.object.id,))
 
-def update_tutor(request, tutor_id):
-    # if tutor_id == '0':
-    #    TutorFormSet = modelformset_factory(Tutor, form=TutorForm, extra=1, can_delete=True)
-    # else:
-    #    TutorFormSet = modelformset_factory(Tutor, form=TutorForm, extra=0, can_delete=True)
+class TutorUpdateView(UpdateView):
+    model = Tutor
+    template_name_suffix = '_update'
+    form_class = TutorForm
+    pk_url_kwarg = 'tutor_id'
+    context_object_name = 'tutor'
 
-
-    # if tutor_id is 0, then we are updating or creating a new tutor
-    # we can avoid a lot of database calls in this case
-
-    if tutor_id == 0 or tutor_id == '0':
-        current_tutor = None
-        nextTutor = None
-        prevTutor = None
-    else:
-        # Get all tutors to minimize database requests.s
-        # We will find the current tutor, previous tutor, and next tutor later
-        tutor_queryset = Tutor.objects.all()
-        tutor_list = list(tutor_queryset)
-        current_tutor = tutor_queryset.get(pk=tutor_id)
-
-        nextTutor = findNextTutor(tutor_id, tutor_list)
-        prevTutor = findPrevTutor(tutor_id, tutor_list)
-
-    if request.method == 'POST':
-        # form is being submitted
-        tutor_form = TutorForm(request.POST, request.FILES, instance=current_tutor)
-
-        # Check if the form is valid
-        if tutor_form.is_valid():
-
-            # in case current_tutor is None (if we making a new tutor) 
-            # then get the instance from the form
-            tutor_to_save = tutor_form.save(commit=False)
-            tutor_to_save = tutor_form.save()
-            tutor_form.save_m2m()
-            print("Tutor to save id: " + str(tutor_to_save.id))
-            # Check which save button was pressed.
-            # If Save and Next was clicked, respond with the next tutor
-            redirectToTutor = None
-            if 'save' in request.POST:
-                # redirectToTutor = str(tutor_to_save.id)
-                success = "Tutor Saved"
-                return HttpResponseRedirect('/tutorboard/')
-            elif 'saveAndNext' in request.POST:
-                redirectToTutor = str(nextTutor.id)
-            else:
-                redirectToTutor = '0'
-
-
-            success= "Tutor Saved"
-            return HttpResponseRedirect('/tutorboard/' + redirectToTutor + '/update/')
-        else:
-            print("Form Invalid.  Tutor not saved.")
-            form_errors = tutor_form.errors
-            print form_errors
-            return render_to_response('tutorboard/tutor_update.html', {
-                'tutor_form': tutor_form,
-                #                     'capability_formset': capability_formset,
-                'tutor_id': tutor_id,
-                'next_tutor': nextTutor,
-                'prev_tutor': prevTutor,
-                #                             'subject_list': subject_list,
-                'form_errors': form_errors},
-                                      context_instance=RequestContext(request))
-
-    else:
-
-        if current_tutor == None:
-            tutor_form = TutorForm()
-        else:
-            tutor_form = TutorForm(instance=current_tutor)
-        return render_to_response('tutorboard/tutor_update.html', {
-            'tutor_form': tutor_form,
-            'tutor_id': tutor_id,
-            'next_tutor': nextTutor,
-            'prev_tutor': prevTutor,
-        },
-                                  context_instance=RequestContext(request))
-
+    def get_context_data(self, **kwargs):
+        tutor_list = list(Tutor.objects.all())
+        nextTutor = findNextTutor(self.object.id, tutor_list)
+        prevTutor = findPrevTutor(self.object.id, tutor_list)
+        kwargs['next_tutor'] = nextTutor
+        kwargs['prev_tutor'] = prevTutor
+        return super(TutorUpdateView, self).get_context_data(**kwargs)
 
 def tutor_availability(request):
     template_name = 'tutorboard/tutor_availability.html'
@@ -196,7 +130,6 @@ def tutor_availability(request):
 
     context = RequestContext(request, {'formset': formset})
     return render(request, template_name, context)
-
 
 class SubjectListAjax(View):
     template_name = "tutorboard/partials/subject_checkboxes.html"
@@ -375,9 +308,7 @@ class SubjectListAjax(View):
 
             #return HttpResponse(simplejson.dumps(json_result), mimetype='application/json')
 
-
 # View helpers. These do not return http responses
-
 def findNextTutor(tutor_id, tutor_list):
     # tutor_id was the number in the URL
 
@@ -386,7 +317,6 @@ def findNextTutor(tutor_id, tutor_list):
         if int(tutor.id) == int(tutor_id) and index + 1 < len(tutor_list):
             return tutor_list[index + 1:index + 2][0]  # returns the tutor object
     return None
-
 
 def findPrevTutor(tutor_id, tutor_list):
     # tutor_id was the number in the URL
@@ -397,7 +327,6 @@ def findPrevTutor(tutor_id, tutor_list):
         if int(tutor.id) == int(tutor_id) and index + 1 > 1:
             return tutor_list[index - 1:index][0]
     return None
-
 
 def getHighestLevel(tutor_id):
     all_caps = Capability.objects.all().filter(tutor__id=tutor_id)

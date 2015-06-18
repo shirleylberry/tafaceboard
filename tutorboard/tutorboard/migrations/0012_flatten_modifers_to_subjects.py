@@ -221,6 +221,7 @@ class Migration(DataMigration):
             notes_text += '}}'
 
             tutor.availability_note += notes_text
+            tutor.save()
 
             # Save skills as subjects
             # sub54 = orm.Subject.objects.create(name='International')

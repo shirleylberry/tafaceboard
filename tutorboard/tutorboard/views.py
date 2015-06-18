@@ -136,7 +136,6 @@ class SubjectListAjax(View):
 
     def get(self, request, *args, **kwargs):
 
-        # Init model
         # The model will be a list of SubjectUpdate objects, start with an empty list
         model = []
 
@@ -149,30 +148,34 @@ class SubjectListAjax(View):
         capability_list = list(Capability.objects.all().filter(tutor__id=tutor_id))
 
         for sub in subject_list:
-            subUpdate = SubjectUpdate()
-            subUpdate.tutor_id = tutor_id
-            subUpdate.subject = sub
+
+            # Make a object to add to our model
+            sub_update = SubjectUpdate()
+
+            # Add current tutor and current subject
+            sub_update.tutor_id = tutor_id
+            sub_update.subject = sub
+
+            # Make a subject form for this subject
+            sub_form = SubjectForm(instance=sub)
+            sub_update.subject_form = sub_form
 
             try:
-
-                # Make a subject form for this subject
-                subForm = SubjectForm(instance=sub)
-                subUpdate.subject_form = subForm
-
+                # Find the capability for this subject if it exists
                 cap = None
                 for capability in capability_list:
                     if capability.subject.id == sub.id:
                         cap = capability
+                sub_update.capability = cap
 
-                subUpdate.capability = cap
-
-                # Make a capability form for the found capability
-                capForm = CapabilityForm(instance=cap)
-                subUpdate.capability_form = capForm
-
-                model.append(subUpdate)
             except MultipleObjectsReturned:
                 print("Multiple capabilities found for the same subject and tutor. Delete one of the capabilities.")
+
+            # Make a capability form for the found capability
+            capForm = CapabilityForm(instance=cap)
+            sub_update.capability_form = capForm
+
+            model.append(sub_update)
 
         context = RequestContext(request, {
             'model': model,
@@ -201,19 +204,19 @@ class SubjectListAjax(View):
                 cap = Capability.objects.create(subject_id=subject_id, tutor_id=tutor_id)
                 sub_for_cap = cap.subject
 
-                subUpdate = SubjectUpdate()
-                subUpdate.tutor_id = tutor_id
-                subUpdate.subject = sub_for_cap
-                subForm = SubjectForm(instance=sub_for_cap)
-                subUpdate.subject_form = subForm
+                sub_update = SubjectUpdate()
+                sub_update.tutor_id = tutor_id
+                sub_update.subject = sub_for_cap
+                sub_form = SubjectForm(instance=sub_for_cap)
+                sub_update.subject_form = sub_form
 
-                subUpdate.capability = cap
+                sub_update.capability = cap
 
                 capForm = CapabilityForm(instance=cap)
-                subUpdate.capability_form = capForm
+                sub_update.capability_form = capForm
 
                 model = []
-                model.append(subUpdate)
+                model.append(sub_update)
 
                 context = RequestContext(request, {
                     'model': model,
@@ -237,14 +240,14 @@ class SubjectListAjax(View):
                 if not sub_for_cap:
                     sub_for_cap = Subject.objects.get(id=subject_id)
 
-                subUpdate = SubjectUpdate()
+                sub_update = SubjectUpdate()
 
-                subUpdate.subject = sub_for_cap
+                sub_update.subject = sub_for_cap
 
-                subUpdate.capability = None
+                sub_update.capability = None
 
                 model = []
-                model.append(subUpdate)
+                model.append(sub_update)
 
                 context = RequestContext(request, {
                     'model': model,
@@ -291,13 +294,13 @@ class SubjectListAjax(View):
                     json_result = "<span style=\"color:red;\">Update failed</span>"
 
                 # Return form and model to template
-                subUpdate = SubjectUpdate()
-                subUpdate.capability = cap
-                subUpdate.capability_form = capForm
-                subUpdate.subject = sub
+                sub_update = SubjectUpdate()
+                sub_update.capability = cap
+                sub_update.capability_form = capForm
+                sub_update.subject = sub
 
                 model = []
-                model.append(subUpdate)
+                model.append(sub_update)
 
                 context = RequestContext(request, {
                     'model': model,

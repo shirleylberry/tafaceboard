@@ -51,9 +51,9 @@ urlpatterns = patterns("",
     
     # Get returns a checkbox list of subjects. Post updates the capability for one tutor and one subject
     url(
-        regex= r'^(?P<tutor_id>\d+)/update/ajax/subjectlist/$',
-    	view = views.SubjectListAjax.as_view(),
-        name = 'ajaxSubjectList'
+        regex=r'^(?P<tutor_id>\d+)/update/ajax/subjectlist/$',
+    	view=views.SubjectListAjax.as_view(),
+        name='ajaxSubjectList'
     ),
 #ideas for urls
 

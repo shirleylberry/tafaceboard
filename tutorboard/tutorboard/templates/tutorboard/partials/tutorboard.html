@@ -152,17 +152,6 @@
             {% if tutor.bioline5 != 'n/a' %}
                 <h3>{{ tutor.bioline5 }}</h3>
             {% endif %}
-            <div class="personality">
-                {% for archetype in tutor.archetype.all %}
-                    <div><img class="lazy-img" data-src="{{ MEDIA_URL }}{{ archetype.image }}" alt="archetype"></div>
-                {% endfor %}
-                {% for energy in tutor.energy.all %}
-                    <div><img class="lazy-img" data-src="{{ MEDIA_URL }}{{ energy.image }}" alt="energy"></div>
-                {% endfor %}
-                {% for presence in tutor.presence.all %}
-                    <div><img class="lazy-img" data-src="{{ MEDIA_URL }}{{ presence.image }}" alt="presence"></div>
-                {% endfor %}
-            </div>
             {% if tutor.availability_note %}
                 <h3 style='color:green;float:left;display:inline-block;'>  {{ tutor.availability_note }} </h3>
             {% endif %}

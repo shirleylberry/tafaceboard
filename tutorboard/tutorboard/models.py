@@ -1,52 +1,6 @@
 from django.db import models
 
-LEVEL = (
-    ('no', 'No'),
-    ('trained', 'Trained'),
-    ('professional', 'Professional'),
-    ('endorsed', 'Endorsed Professional'),
-    ('expert', 'Expert'),
-    ('director', 'Director'),
-)
-
-GENDER = (
-    ('male', 'Male'),
-    ('female', 'Female'),
-    ('na', 'N/A'),
-)
-
-AREA = (
-    ('math', 'Math'),
-    ('verbal', 'Verbal'),
-    ('science', 'Science'),
-    ('crossover', 'Crossover'),
-)
-
-HIREDFOR = (
-    ('ulmath', 'Upper Level Math'),
-    ('llmath', 'Lower Level Math'),
-    ('biology', 'Biology'),
-    ('chemistry', 'Chemistry'),
-    ('physics', 'Physics'),
-    ('english', 'English'),
-    ('ushistory', 'US History'),
-    ('worldhistory', 'World History'),
-    ('eurohistory', 'European History'),
-    ('french', 'French'),
-    ('spanish', 'Spanish'),
-    ('latin', 'Latin'),
-)
-
-PROFDEV = (
-    ('arttutoring', 'The Art of Tutoring'),
-    ('deeperrelationships', 'Building Deeper Relationships'),
-    ('conflictsopportunities1', 'Conflicts into Opportunities Part I'),
-    ('conflictsopportunities2', 'Conflicts Into Opportunities Part II'),
-    ('anxiety1', 'Anxiety Part I'),
-    ('anxiety2', 'Anxiety Part II'),
-    ('motivation1', 'Motivation Part I'),
-    ('motivation2', 'Motivation Part II'),
-)
+from choices import *
 
 
 class Subject(models.Model):
@@ -115,8 +69,10 @@ class Capability(models.Model):
     tutor = models.ForeignKey(Tutor)
 
     def __unicode__(self):
-        return self.tutor.lname + " - " + self.subject.name
+        return self.tutor.fname + " - " + self.tutor.lname + " - " + self.subject.name
 
+    class Meta:
+        ordering = ('self.tutor.fname')
 
 #
 # End of Database Models

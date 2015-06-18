@@ -2,9 +2,10 @@
 from django import forms
 from django.forms import ModelForm, ChoiceField
 from django.forms.fields import Field
-from tutorboard.models import Tutor, Capability, Subject, LEVEL, GENDER, AREA, HIREDFOR, PROFDEV
-
 from django.forms import CheckboxSelectMultiple, TextInput, HiddenInput, Textarea
+
+from tutorboard.models import Tutor, Capability, Subject, LEVEL, GENDER, AREA, HIREDFOR, PROFDEV
+from tutorboard.choices import LEVEL, GENDER, AREA, HIREDFOR, PROFDEV, SUBJECTS
 
 setattr(Field, 'is_hidden', lambda self: isinstance(self.widget, forms.HiddenInput))
 

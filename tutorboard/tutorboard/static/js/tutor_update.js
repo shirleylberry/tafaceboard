@@ -22,7 +22,7 @@ function checkboxChange() {
         checkedAction = 'unchecked';
     }
 
-    $($clickedCheckBox).replaceWith('<img src="/media/images/spinner.gif">');
+    $($clickedCheckBox).replaceWith('<img src="/static/img/spinner.gif">');
 
     var postData = {subjectID: subID, capabilityID: capID, checked: checkedAction};
 
@@ -86,6 +86,4 @@ $(document).ready(function () {
         $("#id_cell").blur(fixPhoneNumber);
         $("#id_altphone").blur(fixPhoneNumber);
     }
-
-
 });

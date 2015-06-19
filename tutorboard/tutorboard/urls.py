@@ -31,11 +31,37 @@ urlpatterns = patterns("",
     # Edit tutor page
     # /tutorboard/{tutorID}/
     url(
-       regex=r'(?P<tutor_id>\d+)/$',
+       regex=r'^(?P<tutor_id>\d+)/$',
        # view = views.update_tutor,
        view=views.TutorUpdateView.as_view(),
        name='update'
     ),
+
+    # Create capability page
+    # /tutorboard/capability/create
+    url(
+       regex=r"^capability/create/",
+       view=views.CapabilityCreate.as_view(),
+       name='capability_create'
+    ),
+
+    # Delete capability page
+    # /tutorboard/capability/{tutorID}/delete/
+    url(
+       regex=r'^capability/(?P<capability_id>\d+)/delete/$',
+       view=views.CapabilityDelete.as_view(),
+       name='capability_delete'
+    ),
+
+    # Edit capability page
+    # /tutorboard/capability/{tutorID}/
+    url(
+       regex=r'^capability/(?P<capability_id>\d+)/$',
+       view=views.CapabilityUpdateView.as_view(),
+       name='capability_update'
+    ),
+
+
 
     # /tutorboard/availability
     url(
@@ -44,11 +70,11 @@ urlpatterns = patterns("",
        name='availability'
     ),
 
-    # Get returns a checkbox list of subjects. Post updates the capability for one tutor and one subject
-    url(
-       regex=r'^(?P<tutor_id>\d+)/update/ajax/subjectlist/$',
-       view=views.SubjectListAjax.as_view(),
-       name='ajaxSubjectList'
-    ),
+    # # Get returns a checkbox list of subjects. Post updates the capability for one tutor and one subject
+    # url(
+    #    regex=r'^(?P<tutor_id>\d+)/update/ajax/subjectlist/$',
+    #    view=views.SubjectListAjax.as_view(),
+    #    name='ajaxSubjectList'
+    # ),
 
 )

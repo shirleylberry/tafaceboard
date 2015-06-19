@@ -1,17 +1,18 @@
 # tutorboard/views.py
 
 from django.core.exceptions import ObjectDoesNotExist, MultipleObjectsReturned
-from django.views.generic import CreateView, UpdateView
+from django.views.generic import CreateView, UpdateView, DeleteView
 from django.http import HttpResponseRedirect, HttpResponse
 from django.shortcuts import render, render_to_response
 from django.forms.models import modelformset_factory
+from django.forms.formsets import formset_factory
 from django.template import RequestContext
 from django.views.generic.base import View
 from django.db.models import Q
 from django.core.urlresolvers import reverse
 
 from tutorboard.models import Tutor, Capability, Subject, SubjectUpdate, LEVEL, GENDER, AREA, HIREDFOR, PROFDEV
-from .forms import SearchForm, TutorForm, CapabilityForm, AvailabilityForm, SubjectForm
+from .forms import SearchForm, TutorForm, CapabilityForm, AvailabilityForm, SubjectForm, CapabilityFormSet
 
 
 class TutorView(View):
@@ -110,13 +111,72 @@ class TutorUpdateView(UpdateView):
     pk_url_kwarg = 'tutor_id'
     context_object_name = 'tutor'
 
+    def get_queryset(self):
+        qs = super(TutorUpdateView, self).get_queryset()
+        qs.prefetch_related('capability_set_subject')
+        return qs
+
     def get_context_data(self, **kwargs):
+        context = super(TutorUpdateView, self).get_context_data(**kwargs)
         tutor_list = list(Tutor.objects.all())
         nextTutor = findNextTutor(self.object.id, tutor_list)
         prevTutor = findPrevTutor(self.object.id, tutor_list)
-        kwargs['next_tutor'] = nextTutor
-        kwargs['prev_tutor'] = prevTutor
-        return super(TutorUpdateView, self).get_context_data(**kwargs)
+        context['next_tutor'] = nextTutor
+        context['prev_tutor'] = prevTutor
+
+        capability_forms = []
+
+        subjects = Subject.objects.all()
+        context['all_subjects'] = subjects
+
+        for cap in self.object.capability_set.all():
+            cap_form = CapabilityForm(instance=cap, auto_id='')
+            capability_forms.append(cap_form)
+            for sub in subjects:
+                if sub == cap.subject:
+                    sub.selected = True
+        context['capability_forms'] = capability_forms
+        return context
+
+class CapabilityUpdateView(UpdateView):
+    model = Capability
+    form_class = CapabilityForm
+    template_name_suffix = '_update'
+    pk_url_kwarg = 'capability_id'
+    context_object_name = 'capability'
+
+    def get_success_url(self):
+        obj = self.get_object()
+        return reverse('capability_update', kwargs={'capability_id': obj.id})
+
+
+class CapabilityCreate(CreateView):
+    model = Capability
+    form_class = CapabilityForm
+    template_name_suffix = '_update'
+    #pk_url_kwarg = 'capability_id'
+    context_object_name = 'capability'
+
+    def get_success_url(self):
+        return reverse('capability_update', kwargs={'capability_id': self.object.id})
+
+    def get_form(self, form_class):
+        form = super(CapabilityCreate, self).get_form(form_class)
+        form.auto_id = ''
+        return form
+
+class CapabilityDelete(DeleteView):
+    model = Capability
+    pk_url_kwarg = 'capability_id'
+
+    def render_to_response(self, context, **response_kwargs):
+        return HttpResponse('Deleted')
+
+    def delete(self, request, *args, **kwargs):
+        self.object = self.get_object()
+        #success_url = self.get_success_url()
+        self.object.delete()
+        return HttpResponse('Deleted')
 
 def tutor_availability(request):
     template_name = 'tutorboard/tutor_availability.html'
@@ -130,186 +190,6 @@ def tutor_availability(request):
 
     context = RequestContext(request, {'formset': formset})
     return render(request, template_name, context)
-
-class SubjectListAjax(View):
-    template_name = "tutorboard/partials/subject_checkboxes.html"
-
-    def get(self, request, *args, **kwargs):
-
-        # The model will be a list of SubjectUpdate objects, start with an empty list
-        model = []
-
-        # Available data
-        tutor_id = self.kwargs['tutor_id']
-
-        # Fill out model by iterating through django models from database
-        subject_list = Subject.objects.all()
-
-        capability_list = list(Capability.objects.all().filter(tutor__id=tutor_id))
-
-        for sub in subject_list:
-
-            # Make a object to add to our model
-            sub_update = SubjectUpdate()
-
-            # Add current tutor and current subject
-            sub_update.tutor_id = tutor_id
-            sub_update.subject = sub
-
-            # Make a subject form for this subject
-            sub_form = SubjectForm(instance=sub)
-            sub_update.subject_form = sub_form
-
-            try:
-                # Find the capability for this subject if it exists
-                cap = None
-                for capability in capability_list:
-                    if capability.subject.id == sub.id:
-                        cap = capability
-                sub_update.capability = cap
-
-            except MultipleObjectsReturned:
-                print("Multiple capabilities found for the same subject and tutor. Delete one of the capabilities.")
-
-            # Make a capability form for the found capability
-            capForm = CapabilityForm(instance=cap)
-            sub_update.capability_form = capForm
-
-            model.append(sub_update)
-
-        context = RequestContext(request, {
-            'model': model,
-            'tutor_id': tutor_id,
-        })
-        return render(request, self.template_name, context)
-
-    def post(self, request, *args, **kwargs):
-
-        if request.is_ajax() == False:
-            return "Request is not ajax"
-        else:
-
-            # Available Data
-            tutor_id = self.kwargs['tutor_id']  # From URL
-            checkedOrUnchecked = request.POST.get('checked', '')  # These may not exist, check carefully
-            subject_id = request.POST.get('subjectID', None)
-            if subject_id == -1: subject_id = None
-            capability_id = request.POST.get('capabilityID', None)
-            if capability_id == -1: capability_id = None
-
-            json_result = 'request is ajax'
-
-            if checkedOrUnchecked == 'checked':
-
-                cap = Capability.objects.create(subject_id=subject_id, tutor_id=tutor_id)
-                sub_for_cap = cap.subject
-
-                sub_update = SubjectUpdate()
-                sub_update.tutor_id = tutor_id
-                sub_update.subject = sub_for_cap
-                sub_form = SubjectForm(instance=sub_for_cap)
-                sub_update.subject_form = sub_form
-
-                sub_update.capability = cap
-
-                capForm = CapabilityForm(instance=cap)
-                sub_update.capability_form = capForm
-
-                model = []
-                model.append(sub_update)
-
-                context = RequestContext(request, {
-                    'model': model,
-                    'tutor_id': tutor_id,
-                })
-                return render(request, self.template_name, context)
-
-            elif checkedOrUnchecked == 'unchecked':
-                # Delete the capability for tutor_id and subject_id
-
-                sub_for_cap = None
-
-                try:
-                    capability = Capability.objects.get(id=capability_id)
-                    sub_for_cap = capability.subject
-                    capability.delete()
-
-                except ObjectDoesNotExist:
-                    print('Capability was deleted before it was created')
-
-                if not sub_for_cap:
-                    sub_for_cap = Subject.objects.get(id=subject_id)
-
-                sub_update = SubjectUpdate()
-
-                sub_update.subject = sub_for_cap
-
-                sub_update.capability = None
-
-                model = []
-                model.append(sub_update)
-
-                context = RequestContext(request, {
-                    'model': model,
-                    'tutor_id': tutor_id,
-                })
-                return render(request, self.template_name, context)
-
-            else:
-                # Form was posted without the checkbox
-                # Save updated capability
-
-                # Available data
-                tutor_id = self.kwargs['tutor_id']
-
-
-                # Subject and Capability ID were passed in with the form
-                subject_id = request.POST['subject_id_manual']
-                sub = Subject.objects.get(id=subject_id)
-                capability_id = request.POST['capability_id_manual']
-                try:
-                    cap = Capability.objects.get(id=capability_id)
-                    # Convert data to form using the capability we want to update
-                    capForm = CapabilityForm(request.POST, instance=cap)
-                    print("Capability updated")
-                    json_result = "<span style=\"color:green;\">Subject updated.</span>"
-                except ObjectDoesNotExist:
-                    capForm = CapabilityForm(request.POST)
-                    print("New capability created")
-                    json_result = "<span style=\"color:green;\">New subject added to tutor</span>"
-
-
-
-                # If the form is valid, save it
-                if capForm.is_valid():
-                    cap = capForm.save(commit=False)
-                    # sub = cap.subject # We have the option of getting the subject from the cap if the DB is slow
-                    cap.save()
-                    # Call highestLevel function
-                    tutor = Tutor.objects.get(id=tutor_id)
-                    tutor.highestLevel = getHighestLevel(tutor_id)
-                    tutor.save()
-                else:
-                    print("Form Fails")
-                    json_result = "<span style=\"color:red;\">Update failed</span>"
-
-                # Return form and model to template
-                sub_update = SubjectUpdate()
-                sub_update.capability = cap
-                sub_update.capability_form = capForm
-                sub_update.subject = sub
-
-                model = []
-                model.append(sub_update)
-
-                context = RequestContext(request, {
-                    'model': model,
-                    'tutor_id': tutor_id,
-                    'json_result': json_result,
-                })
-                return render(request, self.template_name, context)
-
-            #return HttpResponse(simplejson.dumps(json_result), mimetype='application/json')
 
 # View helpers. These do not return http responses
 def findNextTutor(tutor_id, tutor_list):

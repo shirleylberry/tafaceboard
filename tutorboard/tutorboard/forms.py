@@ -5,6 +5,7 @@ from django.forms.fields import Field
 from tutorboard.models import Tutor, Capability, Subject, LEVEL, GENDER, AREA, HIREDFOR, PROFDEV
 
 from django.forms import CheckboxSelectMultiple, TextInput, HiddenInput, Textarea
+from django.forms.models import modelformset_factory
 
 setattr(Field, 'is_hidden', lambda self: isinstance(self.widget, forms.HiddenInput))
 
@@ -55,10 +56,15 @@ class SubjectForm(forms.ModelForm):
 
 
 class CapabilityForm(forms.ModelForm):
+
     class Meta:
         model = Capability
-        fields = ['level', 'level_note', 'score', 'area', 'notes', 'subject', 'tutor']
+        fields = ['level', 'level_note', 'score', 'area', 'notes', 'subject', 'tutor', 'id']
         widgets = {
             'score': TextInput(attrs={'size': '4'}),
             'notes': Textarea(attrs={'rows': '4', 'cols': '40'}),
+            'tutor': HiddenInput(),
+            'subject': HiddenInput(),
         }
+
+CapabilityFormSet = modelformset_factory(Capability)

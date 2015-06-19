@@ -3,6 +3,7 @@ function checkboxChange() {
     var $parentLabel = $clickedCheckBox.parent();
     var $checkResult = $parentLabel.nextAll(".checkResult");
     var $subject_update_model = $parentLabel.parent(".subject-update-model");
+    var $formContainer = $parentLabel.nextAll('.capability-form-container');
 
     var subID = $parentLabel.nextAll(".hiddenSub").val();
     if (!subID) {
@@ -13,54 +14,60 @@ function checkboxChange() {
         capID = -1;
     }
 
-    var checkedAction = '';
+    var check_unchecked = ! $(this).is(":checked");
 
-    if ($(this).is(":checked")) {
-        checkedAction = 'checked';
+    if(check_unchecked){
+        // ask if they want to delete the capability
+        if(confirm('Do you want to remove this subject for this tutor?')){
+            // Delete capability
+            var capID = $formContainer.find('input.form-instance-id').val();
+            $.post('/tutorboard/capability/' + capID + '/delete/', {}, function (data) {
+                console.log(data);
+                $formContainer.html('');
+            });
+        }
+
     }
-    else {
-        checkedAction = 'unchecked';
+    else{
+        $.get("/tutorboard/capability/create/", function (data) {
+
+            var subjectID = $clickedCheckBox.parent().next('.hiddenSub').val();
+
+            $($formContainer).html(data);
+            $formContainer.find("input[name='tutor']").val(django_context.tutor_id);
+            $formContainer.find("input[name='subject']").val(subjectID);
+        });
     }
 
-    $($clickedCheckBox).replaceWith('<img src="/static/img/spinner.gif">');
 
-    var postData = {subjectID: subID, capabilityID: capID, checked: checkedAction};
-
-    $.post("/tutorboard/"+ django_context.tutor_id +"/update/ajax/subjectlist/", postData, function (data) {
-        $($subject_update_model).replaceWith(data);
-        //$('.checkboxSub').off();
-        //$('.checkboxSub').change(checkboxChange);
-        //$('.subUpdateSubmit').off();
-        //$('.subUpdateSubmit').click(subjectUpdateSubmit);
-    });
 }
 
-function subjectUpdateSubmit(event) {
-    // Do ajax submit
-    var $form = $(this).parent("form");
-
-    var subID = $form.parent(".capability-form").prevAll(".hiddenSub").val();
-    if (!subID) {
-        subID = -1;
-    }
-
-    var capID = $form.parent(".capability-form").prevAll(".hiddenCap").val();
-    if (!capID) {
-        capID = -1;
-    }
-
-    var checkedAction = '';
-
-    $(this).replaceWith('<img src="/media/images/spinner.gif">');
-
-    $.post("/tutorboard/"+ django_context.tutor_id +"/update/ajax/subjectlist/", $form.serialize(), function (data) {
-        $form.parent('.capability-form').parent('.subject_update_model').replaceWith(data);
-        $('.checkboxSub').off().change(checkboxChange);
-        $('.subUpdateSubmit').off().click(subjectUpdateSubmit);
-    });
-    event.preventDefault();
-    return false;
-}
+//function subjectUpdateSubmit(event) {
+//    // Do ajax submit
+//    var $form = $(this).parent("form");
+//
+//    var subID = $form.parent(".capability-form").prevAll(".hiddenSub").val();
+//    if (!subID) {
+//        subID = -1;
+//    }
+//
+//    var capID = $form.parent(".capability-form").prevAll(".hiddenCap").val();
+//    if (!capID) {
+//        capID = -1;
+//    }
+//
+//    var checkedAction = '';
+//
+//    $(this).replaceWith('<img src="/media/images/spinner.gif">');
+//
+//    $.post("/tutorboard/"+ django_context.tutor_id +"/update/ajax/subjectlist/", $form.serialize(), function (data) {
+//        $form.parent('.capability-form').parent('.subject_update_model').replaceWith(data);
+//        $('.checkboxSub').off().change(checkboxChange);
+//        $('.subUpdateSubmit').off().click(subjectUpdateSubmit);
+//    });
+//    event.preventDefault();
+//    return false;
+//}
 
 function fixPhoneNumber() {
     var newnum = new String();
@@ -75,15 +82,35 @@ function fixPhoneNumber() {
     }
 }
 
+function saveCapability(data){
+    event.preventDefault();
+
+    var $capabilityForm = $(this);
+    var $formContainer = $capabilityForm.parent('.capability-form-container');
+    var formData = {};
+    $capabilityForm.serializeArray().map(function(x){formData[x.name] = x.value;}); // Converts the form data into a dictionary
+
+    $formContainer.html('<img src="/static/img/spinner.gif">');
+
+    if (formData.id == 'None'){
+        $.post("/tutorboard/capability/create/", formData, function (data) {
+            console.log(data);
+            $formContainer.html(data); // replace the form with the updated form provided by this view
+        });
+    }
+    else{
+        $.post("/tutorboard/capability/" + formData.id + "/", formData, function (data) {
+            $formContainer.html(data); // replace the form with the updated form provided by this view
+        });
+    }
+
+}
+
 $(document).ready(function () {
     if($('html').is('.tutor_update')){
-        $.get("/tutorboard/"+ django_context.tutor_id +"/update/ajax/subjectlist/", function (data) {
-            $("#subjectList").html(data);
-            $(document).on('change', '.checkboxSub', checkboxChange);
-            $('.subUpdateSubmit').click(subjectUpdateSubmit);
-        });
-
+        $(document).on('change', '.checkboxSub', checkboxChange);
         $("#id_cell").blur(fixPhoneNumber);
         $("#id_altphone").blur(fixPhoneNumber);
+        $( "body" ).on('submit', '.capability-form', saveCapability);
     }
 });

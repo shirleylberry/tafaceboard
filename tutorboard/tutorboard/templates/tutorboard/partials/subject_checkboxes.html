@@ -24,59 +24,8 @@
                     <form action="" method="post">
                         {% csrf_token %}
 
-                        {{ sub_update.capability_form.id }}
-                        {{ sub_update.capability_form.errors }}
-                        {{ sub_update.capability_form.non_field_errors }}
+                        {{ sub_update.capability_form.as_p }}
 
-                        {{ sub_update.capability_form.tutor.as_hidden }}
-                        {{ sub_update.capability_form.subject.as_hidden }}
-                        {{ sub_update.capability_form.modifier.as_hidden }}
-
-                        <input
-                                type="hidden"
-                                class="hiddenCap"
-                                name="capability_id_manual"
-                                value="{{ sub_update.capability.id }}"/>
-
-                        <input
-                                type="hidden"
-                                class="hiddenSub"
-                                name="subject_id_manual"
-                                value="{{ sub_update.subject.id }}"/>
-
-                        <span class="sub_update-field">Level: {{ sub_update.capability_form.level }}</span>
-                        <span class="sub_update-field">AP: {{ sub_update.capability_form.ap }}</span>
-                        <span class="sub_update-field">Score: {{ sub_update.capability_form.score }}</span>
-
-                        {% if sub_update.subject.modifier1 %}
-                            <span class="sub_update-field">
-    	                {{ sub_update.subject.modifier1 }}: {{ sub_update.capability_form.modifier1 }}
-    	                </span>
-                        {% endif %}
-
-                        {% if sub_update.subject.modifier2 %}
-                            <span class="sub_update-field">
-	                    {{ sub_update.subject.modifier2 }}: {{ sub_update.capability_form.modifier2 }}
-	                    </span>
-                        {% endif %}
-
-                        {% if sub_update.subject.modifier3 %}
-                            <span class="sub_update-field">
-	                    {{ sub_update.subject.modifier3 }}: {{ sub_update.capability_form.modifier3 }}
-	                    </span>
-                        {% endif %}
-
-                        {% if sub_update.subject.modifier4 %}
-                            <span class="sub_update-field">
-	                    {{ sub_update.subject.modifier4 }}: {{ sub_update.capability_form.modifier4 }}
-	                    </span>
-                        {% endif %}
-                        <a class="sub_updateSubmit" href="#">[save]</a>
-                        <span class="sub_update-field">{{ json_result|safe }}</span>
-
-                        <div class="sub_updateNotes">
-                            <span class="sub_update-field">Notes: {{ sub_update.capability_form.notes }}</span>
-                        </div>
                     </form>
                 </div>
             {% else %}

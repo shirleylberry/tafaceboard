@@ -2,61 +2,6 @@
 {% for tutor in tutor_list %}
     <div class="tutor">
 
-        <div class="info-hidden" style="display: none;">
-            <h3 class='filterable area {{ tutor.area|slugify }}'> {{ tutor.area }} </h3>
-
-            <h3 class='filterable gender {{ tutor.gender|slugify }}'> {{ tutor.gender }} </h3>
-
-            <h3 id='availability-{{ tutor.availability }}'
-                class='filterable availability-number'> {{ tutor.availability }} </h3>
-
-            <h3 class="magic-sort-rank">{{ tutor.availability }}</h3>
-
-            {% for capability in tutor.capability_set.all %}
-                <h3 class='filterable capability {{ capability.subject.name|slugify }} {{ capability.level }}'> {{ capability.subject.name }} </h3>
-
-                {% if capability.ap %}
-                    <h3 class='filterable cap-mod
-                {{ capability.subject.name|slugify }}-ap
-                ap'>
-                        {{ capability.subject.modifier1 }}
-                    </h3>
-                {% endif %}
-
-                {% if capability.modifier1 %}
-                    <h3 class='filterable cap-mod
-                {{ capability.subject.name|slugify }}-{{ capability.subject.modifier1|slugify }}
-                {{ capability.subject.modifier1|slugify }}'>
-                        {{ capability.subject.modifier1 }}
-                    </h3>
-                {% endif %}
-                {% if capability.modifier2 %}
-                    <h3 class='filterable cap-mod
-                {{ capability.subject.name|slugify }}-{{ capability.subject.modifier2|slugify }}
-                {{ capability.subject.modifier2|slugify }}'>
-                        {{ capability.subject.modifier2 }} </h3>
-                {% endif %}
-                {% if capability.modifier3 %}
-                    <h3 class='filterable cap-mod
-                {{ capability.subject.name|slugify }}-{{ capability.subject.modifier3|slugify }}
-                {{ capability.subject.modifier3|slugify }}'>
-                        {{ capability.subject.modifier3 }} </h3>
-                {% endif %}
-                {% if capability.modifier4 %}
-                    <h3 class='filterable cap-mod
-                {{ capability.subject.name|slugify }}-{{ capability.subject.modifier4|slugify }}
-                {{ capability.subject.modifier4|slugify }}'>
-                        {{ capability.subject.modifier4 }} </h3>
-                {% endif %}
-            {% endfor %}
-
-
-            {% for preference in tutor.levelPreferences.all %}
-                <h3 class='filterable preference {{ preference|slugify }}'> {{ preference }} </h3>
-            {% endfor %}
-
-        </div>
-
         <div class="picture-area">
             <div class="picture-overlay-container">
                 {% if tutor.availability_vacation %}
@@ -79,11 +24,10 @@
             <div class="contact">
                 {% if tutor.highestLevelManual %}
                     <img class="levelIcon lazy-img" alt="level icon"
-                         data-src="{{ MEDIA_URL }}images/icons/Level_{{ tutor.highestLevelManual|capfirst }}.gif"
-                    %}"/>
+                         data-src="{{ MEDIA_URL }}images/icons/Level_{{ tutor.highestLevelManual|capfirst }}.gif"/>
                 {% elif tutor.highestLevel %}
                     <img class="levelIcon lazy-img" alt="level icon"
-                          data-src="{{ MEDIA_URL }}images/icons/Level_{{ tutor.highestLevel|capfirst }}.gif" %}" />
+                          data-src="{{ MEDIA_URL }}images/icons/Level_{{ tutor.highestLevel|capfirst }}.gif"/>
                 {% endif %}
 
 
@@ -100,34 +44,12 @@
             <div class="subject">
                 {% for cap in tutor.capability_set.all %}
 
-                    {% if cap.modifier1 and cap.subject.imageMod1 %}
-                        <img class="lazy-img icon {{ cap.subject.name|slugify }}"
-                             data-src="{{ MEDIA_URL }}{{ cap.subject.imageMod1 }}" alt="capability icon">
-                    {% elif cap.modifier2 and cap.subject.imageMod2 %}
-                        <img class="lazy-img icon {{ cap.subject.name|slugify }}"
-                              data-src="{{ MEDIA_URL }}{{ cap.subject.imageMod2 }}" alt="capability icon">
-                    {% elif cap.modifier1 and cap.modifier2 and cap.subject.imageMod3 %}
-                        <img class="lazy-img icon {{ cap.subject.name|slugify }}"
-                              data-src="{{ MEDIA_URL }}{{ cap.subject.imageMod3 }}" alt="capability icon">
-                    {% elif cap.ap and cap.subject.imageAP %}
-                        <img class="lazy-img icon {{ cap.subject.name|slugify }}"
-                              data-src="{{ MEDIA_URL }}{{ cap.subject.imageAP }}" alt="capability icon">
-                    {% else %}
-                        <img class="lazy-img icon {{ cap.subject.name|slugify }}"
-                              data-src="{{ MEDIA_URL }}{{ cap.subject.image }}" alt="capability icon">
-                    {% endif %}
+                    <img class="lazy-img icon {{ cap.subject.name|slugify }}"
+                          data-src="{{ MEDIA_URL }}{{ cap.subject.image }}" alt="capability icon">
+
                     <div class="subject-description-container">
                         <div class="subject-description">
                             <p>{{ cap.subject.name }} - {{ cap.level }}</p>
-
-                            <p>Modifiers:
-                                {% if cap.modifier1 %}{{ cap.subject.modifier1 }},{% endif %}
-                                {% if cap.modifier2 %}{{ cap.subject.modifier2 }},{% endif %}
-                                {% if cap.modifier3 %}{{ cap.subject.modifier3 }},{% endif %}
-                                {% if cap.modifier4 %}{{ cap.subject.modifier4 }},{% endif %}
-                                {% if cap.ap %}AP{% endif %}
-                            </p>
-
                             <p>{{ cap.notes }}</p>
                         </div>
                     </div>

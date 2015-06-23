@@ -24,10 +24,26 @@ class TutorView(ListView):
 
     def get_queryset(self):
         qs = super(TutorView, self).get_queryset()
+
+        # Filter
         f = TutorFilter(self.request.GET, queryset=qs)
         self.filter = f
         qs = f.qs
+
+        # Get subjects
         qs = qs.prefetch_related('capability_set__subject',).all().exclude(hidden=True)
+
+        # Sort
+        sort_type = self.request.GET.get('sort')
+        if sort_type == 'name':
+            qs = qs.order_by('fname')
+        elif sort_type == 'availability':
+            qs = qs.order_by('-availability')
+        elif sort_type == 'level':
+            pass # TODO
+        elif sort_type == 'magic':
+            pass # TODO
+
         return qs
 
     def get_context_data(self, **kwargs):
@@ -116,6 +132,12 @@ class CapabilityDelete(DeleteView):
         #success_url = self.get_success_url()
         self.object.delete()
         return HttpResponse('Deleted')
+
+def tutor_list(request):
+    template_name = 'tutorboard/tutor_list.html'
+    filter =  TutorFilter(request.GET)
+    context = RequestContext(request, {'filter': formset})
+    return render(request, template_name, context)
 
 def tutor_availability(request):
     template_name = 'tutorboard/tutor_availability.html'

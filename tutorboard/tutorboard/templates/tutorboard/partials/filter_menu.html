@@ -1,160 +1,42 @@
+<form action=".">
+    <div class="panel-group" id="accordion" role="tablist">
+        {% for field in filter.form %}
+            <div class="panel panel-default">
+                <div class="panel-heading" role="tab" id="heading-{{ field.id_for_label }}">
+                  <h4 class="panel-title">
+                    <a role="button" data-toggle="collapse" data-parent="#accordion" href="#collapse-{{ field.id_for_label }}" aria-expanded="false" aria-controls="collapse-{{ field.id_for_label }}">
+                      {{ field.label_tag }} {{ field.errors }}
+                    </a>
+                  </h4>
+                </div>
+                <div id="collapse-{{ field.id_for_label }}" class="panel-collapse collapse" role="tabpanel" aria-labelledby="heading-{{ field.id_for_label }}">
+                  <div class="panel-body">
+                      {{ field }}
+                  </div>
+                </div>
+          </div>
+        {% endfor %}
 
-<!-- extends the filter block inside tutor_list.html --> 
+        <div class="panel panel-default">
+            <div class="panel-heading" role="tab" id="heading-id_sort">
+              <h4 class="panel-title">
+                <a role="button" data-toggle="collapse" data-parent="#accordion" href="#collapse-id_sort" aria-expanded="false" aria-controls="collapse-id_sort">
+                  Sort
+                </a>
+              </h4>
+            </div>
+            <div id="collapse-id_sort" class="panel-collapse collapse" role="tabpanel" aria-labelledby="heading-id_sort">
+              <div class="panel-body">
+                  <select id="id_sort" name="sort">
+                    <option value="name">Name</option>
+                    <option value="availability">Availability</option>
+                    <option value="level">Level</option>
+                    <option value="magic" selected="selected">Magic</option>
+                  </select>
+              </div>
+            </div>
+      </div>
 
-    <div id='filtering-list'>
-        <h3>Area</h3>
-        <div class='area-filter'>
-            <ul class="area-list">   
-                {% for area in area_list %}
-                    <li id='{{area|slugify}}' class="area-btn filter-btn"> {{area}} </li>
-                {% endfor %}
-                <li id='area-reset' class='area-btn filter-btn reset-btn'> All </li>                  
-            </ul>
-        </div>
-        <h3>Program</h3>
-        <div class='program-filter'>
-            <ul class="program-list">   
-                {% for program in program_list %}
-                    <li id='{{program|slugify}}' class="program-btn filter-btn"> {{program}} </li>
-                {% endfor %}  
-                <li id='program-reset' class='program-btn filter-btn reset-btn'> All </li>                                  
-            </ul>
-        </div>
-        <h3>Subject</h3>
-        <div class='subject-filter'>
-            <ul class="subject-list math-list cornerstone-list">
-                <li id="cornerstone-math" class='subject-btn filter-btn'>Cornerstone Math</li>
-            </ul>
-            <ul class="subject-list math-list echelon-list">
-                <li id="echelon-math" class='subject-btn filter-btn'>Echelon Math</li>
-            </ul>   
-            <ul class="subject-list verbal-list cornerstone-list">
-                <li id="cornerstone-verbal" class='subject-btn filter-btn'>Cornerstone Verbal</li>
-            </ul>   
-            <ul class="subject-list verbal-list echelon-list">
-                <li id="echelon-verbal" class='subject-btn filter-btn'>Echelon Verbal</li>
-            </ul>         
-            <ul class="subject-list math-list academic-list">         
-                <li id="academic-math-lower" class='subject-btn filter-btn'>Lower Math</li>      
-                <li id="academic-math-upper" class='subject-btn filter-btn'>Upper Math</li>      
-                <li id="academic-biology" class='subject-btn filter-btn'>Biology</li>      
-                <li id="academic-chemistry" class='subject-btn filter-btn'>Chemistry</li>    
-                <li id="academic-physics" class='subject-btn filter-btn'>Physics</li>          
-            </ul>
-            <ul class="subject-list verbal-list academic-list">       
-                <li id="academic-english" class='subject-btn filter-btn'>English</li>      
-                <li id="academic-history-us" class='subject-btn filter-btn'>US History</li>      
-                <li id="academic-history-euroworld" class='subject-btn filter-btn'>European/World History</li>
-                <li id="academic-spanish" class='subject-btn filter-btn'>Spanish</li>      
-                <li id="academic-french" class='subject-btn filter-btn'>French</li>      
-                <li id="academic-latin" class='subject-btn filter-btn'>Latin</li>      
-            </ul>   
-            <ul class="subject-list-reset">
-                <li id='subject-reset' class='subject-btn filter-btn reset-btn'> All </li>  
-            </ul>                                
-        </div>
-        <h3>Modifier</h3>
-        <div class='modifier-filter'>
-            <ul class="modifier-list">  
-                <li id="SAT" class="modifier-btn filter-btn"> SAT II</li>
-                <li id="AP" class="modifier-btn filter-btn"> AP </li>
-                <li id="I" class="modifier-btn filter-btn"> Level I </li>
-                <li id='II' class='modifier-btn filter-btn reset-btn'> Level II </li>       
-            </ul>
-            <ul class="subject-list-reset">
-                <li id='subject-reset' class='subject-btn filter-btn reset-btn'> All </li>  
-            </ul>
-        </div>
-        <h3>Level</h3>
-        <div class='level-filter'>
-            <ul class="level-list">  
-                <li id="professional" class="level-btn filter-btn"> Professional </li>
-                <li id="expert" class="level-btn filter-btn"> Expert </li>
-                <li id="director" class="level-btn filter-btn"> Director </li>
-                <li id='level-reset' class='level-btn filter-btn reset-btn'> All </li>       
-            </ul>
-        </div>
-        <h3>Gender</h3>
-        <div class='gender-filter'>
-            <ul class="gender-list">
-                {% for gender in gender_list %}
-                    <li id='{{gender|slugify}}' class="gender-btn filter-btn"> {{gender}} </li>
-                {% endfor %}
-            <li id='gender-reset' class='gender-btn filter-btn reset-btn'> All </li>       
-            </ul>
-        </div>
-        <h3>Availability</h3>
-        <div class='availability-filter'>
-            <ul class="availability-list">       
-                <li id="one" class='availability-btn filter-btn'>1+ hrs</li>      
-                <li id="five" class='availability-btn filter-btn'>5+ hrs</li>      
-                <li id="ten" class='availability-btn filter-btn'>10+ hrs</li>      
-                <li id="fifteen" class='availability-btn filter-btn'>15+ hrs</li>
-                <li id='availability-reset' class='availability-btn filter-btn reset-btn'> All </li>     
-            </ul>
-        </div>
-        <h3>Energy!</h3>
-        <div class='energy-filter'>
-            <ul class="energy-list"> 
-                {% for energy in energy_list %}
-                    <li id='{{energy|slugify}}' class="energy-btn filter-btn"> {{energy}} </li>
-                {% endfor %} 
-            <li id='energy-reset' class='energy-btn filter-btn reset-btn'> All </li>       
-            </ul>
-        </div>
-        <h3>Vibe</h3>
-        <div class='presence-filter'>
-            <ul class="presence-list">       
-                {% for presence in presence_list %}
-                    <li id='{{presence|slugify}}' class="presence-btn filter-btn"> {{presence}} </li>
-                {% endfor %}   
-            <li id='presence-reset' class='presence-btn filter-btn reset-btn'> All </li>             
-            </ul>
-        </div>
-        <h3>Archetype</h3>
-        <div class='archetype-filter'>
-            <ul class="archetype-list">       
-                 {% for archetype in archetype_list %}
-                    <li id='{{archetype|slugify}}' class="archetype-btn filter-btn"> {{archetype}} </li>
-                {% endfor %}  
-            <li id='archetype-reset' class='archetype-btn filter-btn reset-btn'> All </li>                 
-            </ul>
-        </div>
-        <h3>Location</h3>
-        <div class='location-filter'>
-            <ul class="location-list">       
-                {% for location in location_list %}
-                    <li id='{{location|slugify}}' class="location-btn filter-btn"> {{location}} </li>
-                {% endfor %}  
-            <li id='location-reset' class='location-btn filter-btn reset-btn'> All </li>                 
-            </ul>
-        </div>
-        <h3>Extras</h3>
-        <div class='style-filter'>
-            <ul class="style-list">       
-                {% for style in style_list %}
-                    <li id='{{style|slugify}}' class="style-btn filter-btn"> {{style}} </li>
-                {% endfor %}   
-            <li id='style-reset' class='style-btn filter-btn reset-btn'> All </li>       
-            </ul>
-        </div>
-        <h3>Preference</h3>
-        <div class='preference-filter'>
-            <ul class="preference-list">       
-                {% for preference in preference_list %}
-                    <li id='{{preference|slugify}}' class="preference-btn filter-btn"> {{preference}} </li>
-                {% endfor %}   
-            <li id='preference-reset' class='preference-btn filter-btn reset-btn'> All </li>       
-            </ul>
-        </div>
-        <h3>Skills</h3>
-        <div class='skill-filter'>
-            <ul class="skill-list">       
-                {% for skill in skill_list %}
-                    <li id='{{skill|slugify}}' class="skill-btn filter-btn"> {{skill}} </li>
-                {% endfor %} 
-            <li id='skill-reset' class='skill-btn filter-btn reset-btn'> All </li>         
-            </ul>
-        </div>
+        <input type="submit" value="filter">
     </div>
-    <div><a href='/tutorboard/hidden/'>Show Hidden Tutors</a></div>
+</form>

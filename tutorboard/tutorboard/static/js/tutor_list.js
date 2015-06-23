@@ -17,122 +17,15 @@ $(document).ready(function () {
 
         $('.lazy-img').imageloader();
 
-
         var $container = $('#tutorboard');
         $container.isotope({
             itemSelector: '.tutor',
             layoutMode: 'masonry',
             masonry: {
                 columnWidth: 212
-            },
-            getSortData: {
-                subject: function ($elem) {
-                    return $elem.find('.subject').text();
-                },
-                name: function ($elem) {
-                    return $elem.find('.name').text();
-                },
-                availability: function ($elem) {
-                    return parseInt($elem.find('.availability').text());
-                },
-                magic: function ($elem) {
-                    return parseInt($elem.find('.magic-sort-rank').text());
-                },
-                level: function ($elem) {
-                    return $elem.find('.level').text();
-                }
             }
         });
 
-        $('a.header-button').clickToggle(function () { // handle sort button function actions and css changes
-                // get href attribute, minus the '#'
-                var sortName = $(this).attr('href').slice(1);
-
-                if (sortName == 'magic') {
-
-                    // Sort Decending First
-                    $container.isotope({
-                        sortBy: sortName, // first click case:ascending
-                        sortAscending: false
-                    });
-                }
-                else {
-
-                    // Sort Ascending First
-                    $container.isotope({
-                        sortBy: sortName, // first click case:ascending
-                        sortAscending: true
-                    });
-                }
-
-                $('.header-button').css('border-width', '0');
-                $(this).css('border', '1px solid black');
-                $('.arrowUp, .arrowDown').hide();
-                $(this).find('.arrowUp').show();
-                return false;
-            },
-            function () {
-                // get href attribute, minus the '#'
-                var sortName = $(this).attr('href').slice(1);
-
-                if (sortName == 'magic') {
-
-                    // Sort Decending on second click
-                    $container.isotope({
-                        sortBy: sortName, // first click case:ascending
-                        sortAscending: true
-                    });
-                }
-                else {
-
-                    // Sort Ascending on second click
-                    $container.isotope({
-                        sortBy: sortName, // first click case:ascending
-                        sortAscending: false
-                    });
-                }
-
-                $('.header-button').css('border-width', '0');
-                $(this).css('border', '1px solid black');
-                $('.arrowUp, .arrowDown').hide();
-                $(this).find('.arrowDown').show();
-                return false;
-            });
-
-        // Search Submit
-        $('#search-form').submit(function (e) {
-            var formData = $(this).serialize();
-            console.log(formData);
-            $.post(window.location, formData, function (data) {
-                $('#tutorboard').html(data);
-                $container.isotope('destroy');
-                $container.isotope({
-                    itemSelector: '.tutor',
-                    layoutMode: 'masonry',
-                    masonry: {
-                        columnWidth: 212
-                    },
-                    getSortData: {
-                        subject: function ($elem) {
-                            return $elem.find('.subject').text();
-                        },
-                        name: function ($elem) {
-                            return $elem.find('.name').text();
-                        },
-                        availability: function ($elem) {
-                            return parseInt($elem.find('.availability').text());
-                        },
-                        magic: function ($elem) {
-                            return parseInt($elem.find('.magic-sort-rank').text());
-                        },
-                        level: function ($elem) {
-                            return $elem.find('.level').text();
-                        }
-                    }
-                });
-            });
-            e.preventDefault();
-        });
 
         // show subject decsriptions over icons when clicked
         $body.on('click', '.subject img.icon', function () {
@@ -155,7 +48,7 @@ $(document).ready(function () {
             }
         });
 
-        /* filtering hacks */
+        // filtering hacks
         $('.update-bio').parent().css('display', 'block');
 
         // Expand extra info

@@ -13,22 +13,6 @@
             <a class="btn-link header-button" href="{% url 'availability' %}">Update Hours</a>
 
             <a class="btn-link header-button" href="{% url 'create' %}">Create Tutor</a>
-            <span class = "separator"> | </span>
-            <a class="btn-sort header-button" href="#name">Name
-                <span class='arrowUp'>&and;</span><span class='arrowDown'>&or;</span>
-            </a>
-
-            <a class="btn-sort header-button" href="#availability">Availability
-                <span class='arrowUp'>&and;</span><span class='arrowDown'>&or;</span>
-            </a>
-
-            <a class="btn-sort header-button" href="#level">Level
-                <span class='arrowUp'>&and;</span><span class='arrowDown'>&or;</span>
-            </a>
-
-            <a class="btn-sort header-button" href="#magic">Magic
-                <span class='arrowUp'>&and;</span><span class='arrowDown'>&or;</span>
-            </a>
 
         </div>
     {% endblock %}
@@ -47,27 +31,7 @@
 
 {% block content_left %}
     <div id="filters">
-        <form action=".">
-            <div class="panel-group" id="accordion" role="tablist">
-                {% for field in filter.form %}
-                    <div class="panel panel-default">
-                        <div class="panel-heading" role="tab" id="heading{{ field.id_for_label }}">
-                          <h4 class="panel-title">
-                            <a role="button" data-toggle="collapse" data-parent="#accordion" href="#collapse{{ field.id_for_label }}" aria-expanded="false" aria-controls="collapse{{ field.id_for_label }}">
-                              {{ field.label_tag }} {{ field.errors }}
-                            </a>
-                          </h4>
-                        </div>
-                        <div id="collapse{{ field.id_for_label }}" class="panel-collapse collapse" role="tabpanel" aria-labelledby="heading{{ field.id_for_label }}">
-                          <div class="panel-body">
-                              {{ field }}
-                          </div>
-                        </div>
-                  </div>
-                {% endfor %}
-                <input type="submit" value="filter">
-            </div>
-        </form>
+        {% include "tutorboard/partials/filter_menu.html" with filter=filter %}
     </div>
 {% endblock %}
 
@@ -80,20 +44,6 @@
 
 {% block content_bottom %}
         {% if is_paginated %}
-            <div class="pagination">
-                <span class="page-links">
-                    {% if page_obj.has_previous %}
-                        <a href="/tutorboard/?page={{ page_obj.previous_page_number }}">previous</a>
-                    {% endif %}
-                    <span class="page-current">
-                        Page {{ page_obj.number }} of {{ page_obj.paginator.num_pages }}.
-                    </span>
-                    {% if page_obj.has_next %}
-                        <a href="/tutorboard/?page={{ page_obj.next_page_number }}">next</a>
-                    {% endif %}
-                </span>
-            </div>
+            <button id="load-more"><span>Load More</span></button>
         {% endif %}
 {% endblock %}
-
-

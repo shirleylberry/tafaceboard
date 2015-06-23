@@ -42,11 +42,8 @@ hr { border-color: RGB(237, 237, 237); }
     padding-top: 18px;
     padding-left: 4px;
     padding-right: 15px;
-    text-align: center;
-    font-weight: 700;
-    color: #F00;
     background-color: white;
-    width: 99%;
+    width: 100%;
     position: fixed;
     z-index: 3;
     border-bottom: 1px solid black;
@@ -627,9 +624,10 @@ form > div:nth-of-type(20) {
 /*   Filter Menu   */
 /*******************/
 
-#filters select { width: 100%; }
+#filters select { width: 100%;}
 #filters option { font-size: 16px; text-align: center; }
 #filters .panel-body { padding: 0; }
 #filters .panel-heading { padding: 0; }
 #filters .panel-title a { width: 100%; display: inline-block; padding: 5px; }
 #filters label{cursor:pointer;}
+#id_subjects{height:300px;}

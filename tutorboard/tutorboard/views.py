@@ -3,74 +3,38 @@
 from django.core.exceptions import ObjectDoesNotExist, MultipleObjectsReturned
 from django.views.generic import CreateView, UpdateView, DeleteView
 from django.http import HttpResponseRedirect, HttpResponse
-from django.shortcuts import render, render_to_response
+from django.shortcuts import render
 from django.forms.models import modelformset_factory
-from django.forms.formsets import formset_factory
 from django.template import RequestContext
-from django.views.generic.base import View
+from django.views.generic import ListView
 from django.db.models import Q
 from django.core.urlresolvers import reverse
 
 from tutorboard.models import Tutor, Capability, Subject, SubjectUpdate, LEVEL, GENDER, AREA, HIREDFOR, PROFDEV
 from .forms import SearchForm, TutorForm, CapabilityForm, AvailabilityForm, SubjectForm, CapabilityFormSet
+from filters import TutorFilter
 
 
-class TutorView(View):
+
+
+class TutorView(ListView):
     tutor_list = []
-    template_name = "tutorboard/tutor_list.html"
+    model = Tutor
+    context_object_name = 'tutor_list'
+    template_name_suffix = '_list'
 
-    def get(self, request, *args, **kwargs):
-        tutor_list = Tutor.objects.prefetch_related(
-            'capability_set__subject',
-            ).all().exclude(hidden=True)
+    def get_queryset(self):
+        qs = super(TutorView, self).get_queryset()
+        f = TutorFilter(self.request.GET, queryset=qs)
+        self.filter = f
+        qs = f.qs
+        qs = qs.prefetch_related('capability_set__subject',).all().exclude(hidden=True)
+        return qs
 
-        context = RequestContext(request, {
-            'tutor_list': tutor_list,
-        })
-
-        return render(request, self.template_name, context)
-
-    def post(self, request, *args, **kwargs):
-        self.template_name = "tutorboard/partials/tutorboard.html"
-        search = request.POST.get('search')
-        tutors = Tutor.objects.all()
-
-        # This might be horrifically slow
-        print search
-        if search:
-            tutors = tutors.filter(Q(lname__icontains=search) |
-                                   Q(fname__icontains=search) |
-                                   Q(gotofor__icontains=search) |
-                                   Q(neighborhood__icontains=search) |
-                                   Q(bioline1__icontains=search) |
-                                   Q(bioline2__icontains=search) |
-                                   Q(bioline3__icontains=search) |
-                                   Q(bioline4__icontains=search) |
-                                   Q(bioline5__icontains=search) |
-                                   Q(availability_note__icontains=search) |
-                                   Q(capability__subject__name__icontains=search) |
-                                   Q(capability__notes__icontains=search)
-                                   )
-
-        tutors = tutors.distinct()
-        tutors.prefetch_related(
-            'capability_set__subject',)
-
-        context = RequestContext(request, {'tutor_list': tutors})
-        return render(request, self.template_name, context)
-
-class AllTutorView(TutorView):  # include hidden tutors
-    def get(self, request, *args, **kwargs):
-        tutor_list = Tutor.objects.prefetch_related(
-            'capability_set__subject',).all()
-
-
-        searchForm = SearchForm()
-
-        context = RequestContext(request, {'tutor_list': tutor_list,
-                                           'search_form': searchForm})
-        return render(request, self.template_name, context)
-
+    def get_context_data(self, **kwargs):
+        context = super(TutorView, self).get_context_data(**kwargs)
+        context['filter'] = self.filter
+        return context
 
 class TutorCreate(CreateView):
     template_name_suffix = '_create'
@@ -79,7 +43,7 @@ class TutorCreate(CreateView):
     context_object_name = 'tutor'
 
     def get_success_url(self):
-        return reverse('update',args=(self.object.id,))
+        return reverse('update', args=(self.object.id,))
 
 class TutorUpdateView(UpdateView):
     model = Tutor

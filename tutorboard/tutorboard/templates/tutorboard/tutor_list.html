@@ -45,6 +45,7 @@
 
 {% block content %}
 
+
     <div id="filters">
 
         {% block filters %}
@@ -58,8 +59,11 @@
 
     </div>
 
+
     <div id="tutorboard">
+
         {% include 'tutorboard/partials/tutorboard.html' with tutor_list=tutor_list %}
     </div>
+
 
 {% endblock %}

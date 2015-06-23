@@ -14,11 +14,11 @@ urlpatterns = patterns("",
     ),
 
     # /tutorboard/hidden
-    url(
-       regex=r"hidden/$",
-       view=views.AllTutorView.as_view(),
-       name='hidden'
-    ),
+    # url(
+    #    regex=r"hidden/$",
+    #    view=views.AllTutorView.as_view(),
+    #    name='hidden'
+    # ),
 
     # Create tutor page
     # /tutorboard/create

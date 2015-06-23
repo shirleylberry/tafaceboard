@@ -31,6 +31,7 @@
 
 {% block content_left %}
     <div id="filters">
+        <a href="/tutorboard/" >Reset</a>
         {% include "tutorboard/partials/filter_menu.html" with filter=filter %}
     </div>
 {% endblock %}
@@ -41,5 +42,4 @@
 {% endblock %}
 
 {% block content_bottom %}
-    <button id="load-more"><span>Load More</span></button>
 {% endblock %}

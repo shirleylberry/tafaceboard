@@ -6,7 +6,7 @@ function loadTutors(){
     var getURL = '/tutorboard/list/page' + currentPage +'/';
     $.ajax({
         url: getURL,
-        data: {},
+        data: $('#filter-form').serialize(),
         type: 'get',
         error: function(XMLHttpRequest, textStatus, errorThrown){
             console.log('Error while loading tutors:');

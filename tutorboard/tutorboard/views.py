@@ -71,29 +71,6 @@ class AllTutorView(TutorView):  # include hidden tutors
                                            'search_form': searchForm})
         return render(request, self.template_name, context)
 
-class TutorViewWithFilterMenu(View):
-    tutor_list = []
-    template_name = "tutorboard/tutor_list.html"
-
-    def get(self, request, *args, **kwargs):
-        tutor_list = Tutor.objects.prefetch_related(
-            'capability_set__subject',).all().exclude(hidden=True)
-
-        subject_list = Subject.objects.all()
-        area_list = ['Math', 'Verbal']
-        program_list = ['Echelon', 'Cornerstone', 'Academic']
-        level_list = ['Trained', 'Professional', 'Endorsed', 'Expert', 'Director']
-
-        searchForm = SearchForm()
-
-        context = RequestContext (request, {'tutor_list' : tutor_list,
-                                  'subject_list': subject_list,
-                                  'area_list': AREA,
-                                  'program_list': program_list,
-                                  'gender_list': GENDER,
-                                  'level_list': LEVEL,
-                                  'search_form':searchForm})
-        return render(request, self.template_name, context)
 
 class TutorCreate(CreateView):
     template_name_suffix = '_create'
@@ -148,7 +125,6 @@ class CapabilityUpdateView(UpdateView):
     def get_success_url(self):
         obj = self.get_object()
         return reverse('capability_update', kwargs={'capability_id': obj.id})
-
 
 class CapabilityCreate(CreateView):
     model = Capability

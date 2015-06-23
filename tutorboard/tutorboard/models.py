@@ -48,6 +48,13 @@ PROFDEV = (
     ('motivation2', 'Motivation Part II'),
 )
 
+AVAILABILITY = (
+    (0, 'None'),
+    (1, '>1'),
+    (5, '>5'),
+    (10, '>10'),
+)
+
 
 class Subject(models.Model):
     name = models.CharField(max_length=255, blank=True)
@@ -95,6 +102,8 @@ class Tutor(models.Model):
     availability_vacation = models.TextField(blank=True)
     availability_updated = models.DateTimeField(auto_now=True, blank=True, null=True)
     picture = models.ImageField(upload_to='images/', blank=True, null=True)
+
+    subjects = models.ManyToManyField(Subject, through='Capability')
 
     def __unicode__(self):
         return self.fname

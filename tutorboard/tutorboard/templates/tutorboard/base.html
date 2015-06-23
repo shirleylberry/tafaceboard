@@ -8,9 +8,7 @@
     <meta name="viewport" content="width=device-width, user-scalable=yes">
 
     {% block css_files %}
-        <link rel="stylesheet" type="text/css" href="{% static "css/reset.css" %}" >
-        <link rel="stylesheet" type="text/css" href="{% static "css/jquery-ui.css" %}" />
-        <link href='http://fonts.googleapis.com/css?family=Lato:100,400,900,900italic' rel='stylesheet' type='text/css'>
+        <link rel="stylesheet" type="text/css" href="{% static "css/bootstrap.min.css" %}" >
         <link rel="stylesheet" type="text/css" href="{% static "css/style.css" %}" >
     {% endblock %}
 
@@ -19,7 +17,7 @@
 <body>
 	<div id="header">
 		<div id="header-left">
-			<a href="{% url 'list' %}"> <img alt="logo" id="logo" src="{{ STATIC_URL }}img/Logo.png"> </a>
+			<a href="{% url 'home' %}"> <img alt="logo" id="logo" src="{{ STATIC_URL }}img/Logo.png"> </a>
             
 		</div>
 		<div id="header-right">
@@ -29,7 +27,21 @@
 
 
     <div id="content-container">
-        {% block content %}{% endblock %}
+        {% block content %}
+
+            <div id="content-left">
+                {% block content_left %}{% endblock %}
+            </div>
+
+            <div id="content-main">
+                {% block content_main %}{% endblock %}
+            </div>
+
+            <div id="content-bottom">
+                {% block content_bottom %}{% endblock %}
+            </div>
+
+        {% endblock %}
     </div>
 
 	<div id="footer">
@@ -48,7 +60,8 @@
 
         {# libraries #}
         <script src="{% static "js/jquery.min.js" %}"></script>
-        <script src="{% static "js/jquery-ui.min.js" %}"></script>
+        <script src="{% static "js/bootstrap.min.js" %}"></script>
+        <script src="{% static "js/throttle.js" %}"></script>
         <script src="{% static "js/isotope.min.js" %}"></script>
         <script src="{% static "js/imageloader.js" %}"></script>
 
@@ -56,7 +69,6 @@
         <script src="{% static "js/global.js" %}"></script>
         <script src="{% static "js/tutor_list.js" %}"></script>
         <script src="{% static "js/tutor_update.js" %}"></script>
-        <script src="{% static "js/filters.js" %}"></script>
 
     {% endblock %}
 

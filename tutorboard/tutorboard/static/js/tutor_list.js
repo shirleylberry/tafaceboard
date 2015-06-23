@@ -1,7 +1,43 @@
+var $body, $container;
+var currentPage = 1;
+var loadReady = false;
+
+function loadTutors(){
+    var getURL = '/tutorboard/list/page' + currentPage +'/';
+    $.ajax({
+        url: getURL,
+        data: $('#filter-form').serialize(),
+        type: 'get',
+        error: function(XMLHttpRequest, textStatus, errorThrown){
+            console.log('Error while loading tutors:');
+            console.log(textStatus);
+            console.log(errorThrown);
+        },
+        success: function(data){
+            currentPage++;
+
+            var $items = $(data);
+            $container.append($items)
+                .isotope('appended', $items);
+
+            $('.lazy-img').imageloader();
+            loadReady = true;
+        }
+    });
+}
 
 $(document).ready(function () {
     if($('html').is('.tutor_list')) {
-        var $body = $('body');
+        $body = $('body');
+
+        $container = $('#tutorboard');
+        $container.isotope({
+            itemSelector: '.tutor',
+            layoutMode: 'masonry',
+            masonry: {
+                columnWidth: 212
+            }
+        });
 
         $.fn.clickToggle = function (func1, func2) {
             var funcs = [func1, func2];
@@ -14,125 +50,6 @@ $(document).ready(function () {
             });
             return this;
         };
-
-        $('.lazy-img').imageloader();
-
-
-        var $container = $('#tutorboard');
-        $container.isotope({
-            itemSelector: '.tutor',
-            layoutMode: 'masonry',
-            masonry: {
-                columnWidth: 212
-            },
-            getSortData: {
-                subject: function ($elem) {
-                    return $elem.find('.subject').text();
-                },
-                name: function ($elem) {
-                    return $elem.find('.name').text();
-                },
-                availability: function ($elem) {
-                    return parseInt($elem.find('.availability').text());
-                },
-                magic: function ($elem) {
-                    return parseInt($elem.find('.magic-sort-rank').text());
-                },
-                level: function ($elem) {
-                    return $elem.find('.level').text();
-                }
-            }
-        });
-
-        $('a.header-button').clickToggle(function () { // handle sort button function actions and css changes
-                // get href attribute, minus the '#'
-                var sortName = $(this).attr('href').slice(1);
-
-                if (sortName == 'magic') {
-
-                    // Sort Decending First
-                    $container.isotope({
-                        sortBy: sortName, // first click case:ascending
-                        sortAscending: false
-                    });
-                }
-                else {
-
-                    // Sort Ascending First
-                    $container.isotope({
-                        sortBy: sortName, // first click case:ascending
-                        sortAscending: true
-                    });
-                }
-
-                $('.header-button').css('border-width', '0');
-                $(this).css('border', '1px solid black');
-                $('.arrowUp, .arrowDown').hide();
-                $(this).find('.arrowUp').show();
-                return false;
-            },
-            function () {
-                // get href attribute, minus the '#'
-                var sortName = $(this).attr('href').slice(1);
-
-                if (sortName == 'magic') {
-
-                    // Sort Decending on second click
-                    $container.isotope({
-                        sortBy: sortName, // first click case:ascending
-                        sortAscending: true
-                    });
-                }
-                else {
-
-                    // Sort Ascending on second click
-                    $container.isotope({
-                        sortBy: sortName, // first click case:ascending
-                        sortAscending: false
-                    });
-                }
-
-                $('.header-button').css('border-width', '0');
-                $(this).css('border', '1px solid black');
-                $('.arrowUp, .arrowDown').hide();
-                $(this).find('.arrowDown').show();
-                return false;
-            });
-
-        // Search Submit
-        $('#search-form').submit(function (e) {
-            var formData = $(this).serialize();
-            console.log(formData);
-            $.post(window.location, formData, function (data) {
-                $('#tutorboard').html(data);
-                $container.isotope('destroy');
-                $container.isotope({
-                    itemSelector: '.tutor',
-                    layoutMode: 'masonry',
-                    masonry: {
-                        columnWidth: 212
-                    },
-                    getSortData: {
-                        subject: function ($elem) {
-                            return $elem.find('.subject').text();
-                        },
-                        name: function ($elem) {
-                            return $elem.find('.name').text();
-                        },
-                        availability: function ($elem) {
-                            return parseInt($elem.find('.availability').text());
-                        },
-                        magic: function ($elem) {
-                            return parseInt($elem.find('.magic-sort-rank').text());
-                        },
-                        level: function ($elem) {
-                            return $elem.find('.level').text();
-                        }
-                    }
-                });
-            });
-            e.preventDefault();
-        });
 
         // show subject decsriptions over icons when clicked
         $body.on('click', '.subject img.icon', function () {
@@ -155,7 +72,7 @@ $(document).ready(function () {
             }
         });
 
-        /* filtering hacks */
+        // filtering hacks
         $('.update-bio').parent().css('display', 'block');
 
         // Expand extra info
@@ -163,7 +80,7 @@ $(document).ready(function () {
             var currentTutor = $(this).closest(".tutor");
             $(currentTutor).children(".info-extra").toggle();
             $(currentTutor).toggleClass("expand");
-            $("#tutorboard").isotope('reLayout');
+            $container.isotope('layout');
         });
         // Unexpand all tutors reset button
         $body.on('click', '.reset-all', function () {
@@ -177,5 +94,19 @@ $(document).ready(function () {
             $("#tutorboard").isotope('remove', $tutorElement, function () {
             });
         });
+
+        $(window).scroll($.throttle( 250, function() {
+            if(loadReady){
+                if (document.documentElement.clientHeight +
+                    $(document).scrollTop() >= document.body.offsetHeight )
+                {
+                    loadReady = false;
+                    loadTutors();
+                }
+            }
+
+        }));
+
+        loadTutors();
     }
 }); // End of jQuery Ready

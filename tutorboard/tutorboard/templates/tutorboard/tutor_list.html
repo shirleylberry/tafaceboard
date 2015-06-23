@@ -13,22 +13,6 @@
             <a class="btn-link header-button" href="{% url 'availability' %}">Update Hours</a>
 
             <a class="btn-link header-button" href="{% url 'create' %}">Create Tutor</a>
-            <span class = "separator"> | </span>
-            <a class="btn-sort header-button" href="#name">Name
-                <span class='arrowUp'>&and;</span><span class='arrowDown'>&or;</span>
-            </a>
-
-            <a class="btn-sort header-button" href="#availability">Availability
-                <span class='arrowUp'>&and;</span><span class='arrowDown'>&or;</span>
-            </a>
-
-            <a class="btn-sort header-button" href="#level">Level
-                <span class='arrowUp'>&and;</span><span class='arrowDown'>&or;</span>
-            </a>
-
-            <a class="btn-sort header-button" href="#magic">Magic
-                <span class='arrowUp'>&and;</span><span class='arrowDown'>&or;</span>
-            </a>
 
         </div>
     {% endblock %}
@@ -43,23 +27,19 @@
     {% endblock %}
 {% endblock %}
 
-{% block content %}
 
+
+{% block content_left %}
     <div id="filters">
-
-        {% block filters %}
-            <span>
-                <a class="reset-all" href="#">
-                    <img class="reset" src="{% static "img/Reset_Button.png" %}" alt="reset">
-                </a>
-            </span>
-            {% include "tutorboard/partials/filter_menu_rendered.html" %}
-        {% endblock %}
-
+        <a href="/tutorboard/" >Reset</a>
+        {% include "tutorboard/partials/filter_menu.html" with filter=filter %}
     </div>
+{% endblock %}
 
+{% block content_main %}
     <div id="tutorboard">
-        {% include 'tutorboard/partials/tutorboard.html' with tutor_list=tutor_list %}
     </div>
+{% endblock %}
 
+{% block content_bottom %}
 {% endblock %}

@@ -20,6 +20,7 @@ class TutorView(ListView):
     model = Tutor
     context_object_name = 'tutor_list'
     template_name_suffix = '_list'
+    paginate_by = 10
 
     def get_queryset(self):
         qs = super(TutorView, self).get_queryset()

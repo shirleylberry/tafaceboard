@@ -1,3 +1,22 @@
+/*******************/
+/*     Global      */
+/*******************/
+body {
+    background-image: url('/static/img/streetgrid.gif');
+    font-family: 'Arial', sans-serif;
+    color: black;
+}
+
+hr { border-color: RGB(237, 237, 237); }
+
+#content-container { min-height: 1000px; padding-top: 60px; }
+
+#content-left { width: 200px; float: left; }
+
+#content-main { margin-left: 200px; }
+
+#content-bottom { text-align: center; margin: 30px 10px; }
+
 .quickbody {
     background-color: #eee;
     font-family: 'Lato', sans-serif;
@@ -15,6 +34,10 @@
     display: none;
 }
 
+/*******************/
+/*       Nav       */
+/*******************/
+
 #header {
     padding-top: 18px;
     padding-left: 4px;
@@ -29,22 +52,6 @@
     border-bottom: 1px solid black;
 }
 
-#header-left {
-    float: left;
-}
-
-#header-right {
-    float: right;
-}
-
-#btn-sort {
-    display: inline-block;
-}
-
-#search-container {
-    display: inline-block;
-}
-
 .header-button {
     display: inline-block;
     border-radius: 6px;
@@ -55,18 +62,14 @@
     text-decoration: none;
 }
 
-.btn-link {
-    background-color: RGB(152, 152, 152);
-}
+#header-left { float: left; }
+#header-right { float: right; }
+#btn-sort { display: inline-block; }
+#search-container { display: inline-block; }
 
-.separator {
-    color: black;
-    padding-right: 10px;
-}
-
-#header-search {
-    display: inline-block;
-}
+.btn-link { background-color: RGB(152, 152, 152); }
+.separator { color: black; padding-right: 10px; }
+#header-search { display: inline-block; }
 
 .arrowUp {
     margin-left: 3px;
@@ -98,31 +101,13 @@
     background-image: url('/static/img/Reset_Button_Hover.gif');
 }
 
-body {
-    background-image: url('/static/img/streetgrid.gif');
-    font-family: 'Arial', sans-serif;
-    color: black;
-}
+/*******************/
+/*   Tutorboard    */
+/*******************/
 
-hr {
-    border-color: RGB(237, 237, 237);
-}
+#tutorboard { }
 
-#content-container {
-    min-height: 1000px;
-}
-
-#tutorboard {
-    position: absolute;
-    width: 88%;
-    left: 190px;
-    right: 0;
-    top: 50px;
-    bottom: 20px;
-}
-
-#tutorboard ul {
-}
+#tutorboard ul { }
 
 #tutorboard .tutor {
     overflow: hidden;
@@ -188,6 +173,8 @@ hr {
 
 #tutorboard .info-extra {
 }
+#tutorboard p{margin: 0 0 0 0}
+#tutorboard h3{margin: 0 0 0 0}
 
 #tutorboard .contact {
     margin-top: 5px;
@@ -289,7 +276,6 @@ hr {
     border: 0 solid RGB(151, 151, 151);
     overflow: hidden;
     max-width: 17px;
-
 }
 
 .title {
@@ -369,8 +355,9 @@ hr {
     display: none;
 }
 
-/* ****** */
-/* Update View */
+/*******************/
+/*   Update View   */
+/*******************/
 
 .subUpdate-field {
     display: inline;
@@ -395,7 +382,6 @@ hr {
     border-right: solid 1px #888;
     border-left: solid 1px #f9f9f9;
     margin-left: 10px;
-
 }
 
 .next-button {
@@ -425,7 +411,6 @@ hr {
 }
 
 .update-subject th {
-
     color: white;
     padding-right: 25px;
 }
@@ -467,8 +452,9 @@ hr {
     color: red;
 }
 
-/* ****** */
-/* Availability Update Page */
+/***********************/
+/*  Availability page  */
+/***********************/
 
 .avail-form {
     position: absolute;
@@ -522,60 +508,11 @@ hr {
     display: inline;
 }
 
-/* ****** */
-/*Checkbox Code*/
-
+/*******************/
+/*   Checkboxes    */
+/*******************/
 input[type=checkbox] {
     margin: 0 8px;
-}
-
-/* Filtering Menu Styles */
-
-#filtering-list {
-    width: 150px;
-    position: fixed;
-    left: 0;
-    top: 75px;
-    margin: 10px;
-}
-
-.filter-btn {
-    cursor: pointer;
-}
-
-.filter-btn:hover {
-    color: #C2D1D0
-}
-
-#filters .ui-accordion .ui-accordion-header {
-    padding: 2px 2px 2px 15px;
-    font-size: 12px;
-}
-
-.ui-accordion-header-active {
-    background-color: #66595B;
-    color: white;
-}
-
-.ui-accordion-header {
-    height: 16px;
-    margin-top: 0;
-    font-size: 90%;
-
-}
-
-.ui-accordion * {
-    z-index: 10;
-    background-image: none !important;
-}
-
-.ui-accordion-content {
-    padding: 0 !important;
-}
-
-.ui-accordion-content ul li {
-    padding: 5px;
-    font-size: 12px;
 }
 
 li {
@@ -686,3 +623,13 @@ form > div:nth-of-type(20) {
     transition-duration: 0s;
 }
 
+/*******************/
+/*   Filter Menu   */
+/*******************/
+
+#filters select { width: 100%; }
+#filters option { font-size: 16px; text-align: center; }
+#filters .panel-body { padding: 0; }
+#filters .panel-heading { padding: 0; }
+#filters .panel-title a { width: 100%; display: inline-block; padding: 5px; }
+#filters label{cursor:pointer;}

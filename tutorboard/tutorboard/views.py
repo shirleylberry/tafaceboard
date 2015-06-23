@@ -19,7 +19,7 @@ class TutorView(ListView):
     tutor_list = []
     model = Tutor
     context_object_name = 'tutor_list'
-    template_name_suffix = '_list'
+    template_name = 'tutorboard/partials/tutorboard.html'
     paginate_by = 10
 
     def get_queryset(self):
@@ -27,7 +27,6 @@ class TutorView(ListView):
 
         # Filter
         f = TutorFilter(self.request.GET, queryset=qs)
-        self.filter = f
         qs = f.qs
 
         # Get subjects
@@ -48,7 +47,6 @@ class TutorView(ListView):
 
     def get_context_data(self, **kwargs):
         context = super(TutorView, self).get_context_data(**kwargs)
-        context['filter'] = self.filter
         return context
 
 class TutorCreate(CreateView):
@@ -133,13 +131,13 @@ class CapabilityDelete(DeleteView):
         self.object.delete()
         return HttpResponse('Deleted')
 
-def tutor_list(request):
+def page_tutor_list(request):
     template_name = 'tutorboard/tutor_list.html'
     filter =  TutorFilter(request.GET)
-    context = RequestContext(request, {'filter': formset})
+    context = RequestContext(request, {'filter': filter})
     return render(request, template_name, context)
 
-def tutor_availability(request):
+def page_tutor_availability(request):
     template_name = 'tutorboard/tutor_availability.html'
     TutorFormSet = modelformset_factory(Tutor, form=AvailabilityForm)
     if request.method == 'POST':

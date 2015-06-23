@@ -17,7 +17,7 @@
 <body>
 	<div id="header">
 		<div id="header-left">
-			<a href="{% url 'list' %}"> <img alt="logo" id="logo" src="{{ STATIC_URL }}img/Logo.png"> </a>
+			<a href="{% url 'home' %}"> <img alt="logo" id="logo" src="{{ STATIC_URL }}img/Logo.png"> </a>
             
 		</div>
 		<div id="header-right">
@@ -61,6 +61,7 @@
         {# libraries #}
         <script src="{% static "js/jquery.min.js" %}"></script>
         <script src="{% static "js/bootstrap.min.js" %}"></script>
+        <script src="{% static "js/throttle.js" %}"></script>
         <script src="{% static "js/isotope.min.js" %}"></script>
         <script src="{% static "js/imageloader.js" %}"></script>
 

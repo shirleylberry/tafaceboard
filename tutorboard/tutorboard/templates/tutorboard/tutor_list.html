@@ -37,13 +37,9 @@
 
 {% block content_main %}
     <div id="tutorboard">
-
-        {% include 'tutorboard/partials/tutorboard.html' with tutor_list=tutor_list %}
     </div>
 {% endblock %}
 
 {% block content_bottom %}
-        {% if is_paginated %}
-            <button id="load-more"><span>Load More</span></button>
-        {% endif %}
+    <button id="load-more"><span>Load More</span></button>
 {% endblock %}

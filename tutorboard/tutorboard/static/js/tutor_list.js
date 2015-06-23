@@ -1,7 +1,43 @@
+var $body, $container;
+var currentPage = 1;
+var loadReady = false;
+
+function loadTutors(){
+    var getURL = '/tutorboard/list/page' + currentPage +'/';
+    $.ajax({
+        url: getURL,
+        data: {},
+        type: 'get',
+        error: function(XMLHttpRequest, textStatus, errorThrown){
+            console.log('Error while loading tutors:');
+            console.log(textStatus);
+            console.log(errorThrown);
+        },
+        success: function(data){
+            currentPage++;
+
+            var $items = $(data);
+            $container.append($items)
+                .isotope('appended', $items);
+
+            $('.lazy-img').imageloader();
+            loadReady = true;
+        }
+    });
+}
 
 $(document).ready(function () {
     if($('html').is('.tutor_list')) {
-        var $body = $('body');
+        $body = $('body');
+
+        $container = $('#tutorboard');
+        $container.isotope({
+            itemSelector: '.tutor',
+            layoutMode: 'masonry',
+            masonry: {
+                columnWidth: 212
+            }
+        });
 
         $.fn.clickToggle = function (func1, func2) {
             var funcs = [func1, func2];
@@ -14,18 +50,6 @@ $(document).ready(function () {
             });
             return this;
         };
-
-        $('.lazy-img').imageloader();
-
-        var $container = $('#tutorboard');
-        $container.isotope({
-            itemSelector: '.tutor',
-            layoutMode: 'masonry',
-            masonry: {
-                columnWidth: 212
-            }
-        });
-
 
         // show subject decsriptions over icons when clicked
         $body.on('click', '.subject img.icon', function () {
@@ -56,7 +80,7 @@ $(document).ready(function () {
             var currentTutor = $(this).closest(".tutor");
             $(currentTutor).children(".info-extra").toggle();
             $(currentTutor).toggleClass("expand");
-            $("#tutorboard").isotope('reLayout');
+            $container.isotope('layout');
         });
         // Unexpand all tutors reset button
         $body.on('click', '.reset-all', function () {
@@ -70,5 +94,19 @@ $(document).ready(function () {
             $("#tutorboard").isotope('remove', $tutorElement, function () {
             });
         });
+
+        $(window).scroll($.throttle( 250, function() {
+            if(loadReady){
+                if (document.documentElement.clientHeight +
+                    $(document).scrollTop() >= document.body.offsetHeight )
+                {
+                    loadReady = false;
+                    loadTutors();
+                }
+            }
+
+        }));
+
+        loadTutors();
     }
 }); // End of jQuery Ready

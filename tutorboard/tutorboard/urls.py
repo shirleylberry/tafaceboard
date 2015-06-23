@@ -6,36 +6,52 @@ from tutorboard import views
 
 urlpatterns = patterns("",
 
+    ################
+    #     Pages
+    ################
+
     # /tutorboard/
     url(
        regex=r"^$",
+       view=views.page_tutor_list,
+       name='home'
+    ),
+
+    # /tutorboard/availability
+    url(
+       regex=r'^availability/$',
+       view=views.page_tutor_availability,
+       name='availability'
+    ),
+
+    #########################
+    #     Tutor Views
+    #########################
+
+    url(
+       regex=r"^list/page(?P<page>[0-9]+)/$",
        view=views.TutorView.as_view(),
        name='list'
     ),
 
-    # /tutorboard/hidden
-    # url(
-    #    regex=r"hidden/$",
-    #    view=views.AllTutorView.as_view(),
-    #    name='hidden'
-    # ),
-
-    # Create tutor page
-    # /tutorboard/create
+    # Create: /tutorboard/create
     url(
        regex=r"^create/",
        view=views.TutorCreate.as_view(),
        name='create'
     ),
 
-    # Edit tutor page
-    # /tutorboard/{tutorID}/
+    # Update: /tutorboard/{tutorID}/
     url(
        regex=r'^(?P<tutor_id>\d+)/$',
        # view = views.update_tutor,
        view=views.TutorUpdateView.as_view(),
        name='update'
     ),
+
+    ##############################
+    # Capability/Subject Views
+    ##############################
 
     # Create capability page
     # /tutorboard/capability/create
@@ -61,20 +77,5 @@ urlpatterns = patterns("",
        name='capability_update'
     ),
 
-
-
-    # /tutorboard/availability
-    url(
-       regex=r'^availability/$',
-       view=views.tutor_availability,
-       name='availability'
-    ),
-
-    # # Get returns a checkbox list of subjects. Post updates the capability for one tutor and one subject
-    # url(
-    #    regex=r'^(?P<tutor_id>\d+)/update/ajax/subjectlist/$',
-    #    view=views.SubjectListAjax.as_view(),
-    #    name='ajaxSubjectList'
-    # ),
 
 )

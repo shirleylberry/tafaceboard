@@ -47,15 +47,10 @@
 
 
     <div id="filters">
-
-        {% block filters %}
-            <span>
-                <a class="reset-all" href="#">
-                    <img class="reset" src="{% static "img/Reset_Button.png" %}" alt="reset">
-                </a>
-            </span>
-            {% include "tutorboard/partials/filter_menu_rendered.html" %}
-        {% endblock %}
+    <form action=".">
+        {{ filter.form.as_p }}
+        <input type="submit" value="filter">
+    </form>
 
     </div>
 

@@ -15,8 +15,6 @@ from .forms import SearchForm, TutorForm, CapabilityForm, AvailabilityForm, Subj
 from filters import TutorFilter
 
 
-
-
 class TutorView(ListView):
     tutor_list = []
     model = Tutor

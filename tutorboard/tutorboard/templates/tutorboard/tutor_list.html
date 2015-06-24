@@ -19,8 +19,9 @@
 
     {% block tutor_search_form %}
         <div id="search-container">
-            <form id="search-form" method="post" action=".">
-                <input name="search" type="text" id="searchbar">
+            <form id="search-form" method="get" action="/search/">
+                {% csrf_token  %}
+                <input name="q" type="text" id="searchbar">
                 <input type="submit" value="Go">
             </form>
         </div>

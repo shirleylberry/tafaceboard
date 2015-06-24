@@ -105,6 +105,9 @@ class Tutor(models.Model):
 
     subjects = models.ManyToManyField(Subject, through='Capability')
 
+    def get_absolute_url(self):
+        return "/%i/" % self.id
+
     def __unicode__(self):
         return self.fname
 

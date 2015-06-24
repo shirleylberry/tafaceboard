@@ -1,3 +1,4 @@
+whoosh_index/
 public/
 .idea/
 *.sql
@@ -64,9 +65,6 @@ docs/_build/
 # PyBuilder
 target/
 
-# media and images
-*.jpg
-*.png
-*.gif
-
+# media
+media/
 .idea/

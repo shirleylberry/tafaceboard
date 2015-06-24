@@ -8,9 +8,11 @@ admin.autodiscover()
 
 urlpatterns = patterns('',
     # Examples:
-    # url(r'^$', 'django_roster.views.home', name='home'),
-    url(r'^$', RedirectView.as_view(url='/tutorboard/')),
-    url(r'^tutorboard/', include('tutorboard.urls')),
+
+    url(r'^', include('tutorboard.urls')),
+    #url(r'^$', RedirectView.as_view(url='/tutorboard/')),
+    #url(r'^tutorboard/', include('tutorboard.urls')),
+    url(r'^search/', include('haystack.urls')),
     url(r'^login/$', login),
     url(r'^logout/$', logout),
     

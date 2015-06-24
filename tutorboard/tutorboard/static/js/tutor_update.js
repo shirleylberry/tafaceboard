@@ -21,7 +21,7 @@ function checkboxChange() {
         if(confirm('Do you want to remove this subject for this tutor?')){
             // Delete capability
             var capID = $formContainer.find('input.form-instance-id').val();
-            $.post('/tutorboard/capability/' + capID + '/delete/', {}, function (data) {
+            $.post('/capability/' + capID + '/delete/', {}, function (data) {
                 console.log(data);
                 $formContainer.html('');
             });
@@ -29,7 +29,7 @@ function checkboxChange() {
 
     }
     else{
-        $.get("/tutorboard/capability/create/", function (data) {
+        $.get("/capability/create/", function (data) {
 
             var subjectID = $clickedCheckBox.parent().next('.hiddenSub').val();
 
@@ -93,13 +93,13 @@ function saveCapability(data){
     $formContainer.html('<img src="/static/img/spinner.gif">');
 
     if (formData.id == 'None'){
-        $.post("/tutorboard/capability/create/", formData, function (data) {
+        $.post("/capability/create/", formData, function (data) {
             console.log(data);
             $formContainer.html(data); // replace the form with the updated form provided by this view
         });
     }
     else{
-        $.post("/tutorboard/capability/" + formData.id + "/", formData, function (data) {
+        $.post("/capability/" + formData.id + "/", formData, function (data) {
             $formContainer.html(data); // replace the form with the updated form provided by this view
         });
     }

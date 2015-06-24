@@ -3,7 +3,7 @@ var currentPage = 1;
 var loadReady = false;
 
 function loadTutors(){
-    var getURL = '/tutorboard/list/page' + currentPage +'/';
+    var getURL = '/list/page' + currentPage +'/';
     $.ajax({
         url: getURL,
         data: $('#filter-form').serialize(),

@@ -26,14 +26,12 @@ class TutorView(ListView):
 
         # Sort
         sort_type = self.request.GET.get('sort')
-        if sort_type == 'name':
-            qs = qs.order_by('fname')
-        elif sort_type == 'availability':
-            qs = qs.order_by('-availability')
-        elif sort_type == 'level':
+        if sort_type == 'level':
             pass # TODO
         elif sort_type == 'magic':
             pass # TODO
+        elif sort_type is not None:
+            qs = qs.order_by(sort_type)
 
         return qs
 

@@ -23,14 +23,43 @@ class SearchForm(forms.Form):
 class TutorForm(forms.ModelForm):
     class Meta:
         model = Tutor
-        fields = ['bioline1',
-                  'bioline2',
-                  'bioline3',
-                  'bioline4',
-                  'bioline5',
-                  'highestLevel',
-                  'availability_note',
-                  'availability_vacation']
+        fields = [
+            'picture',
+            'fname',
+            'lname',
+
+            'availability',
+
+            'availability_note',
+            'availability_vacation',
+
+            'area',
+            'gotofor',
+            'bioline1',
+            'bioline2',
+            'bioline3',
+            'bioline4',
+            'bioline5',
+            'highestLevel',
+            'highestLevelManual',
+
+            'gender',
+            'email',
+            'altemail',
+
+            'cell',
+            'altphone',
+
+            'address1',
+            'address2',
+            'city',
+            'state',
+            'zip',
+            'neighborhood',
+            'hidden'
+
+            #'availability_updated',
+            ]
         widgets = {
             'bioline1': TextInput(attrs={'class': 'update-bio'}),
             'bioline2': TextInput(attrs={'class': 'update-bio'}),

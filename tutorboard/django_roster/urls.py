@@ -7,21 +7,13 @@ from django.conf.urls.static import static
 admin.autodiscover()
 
 urlpatterns = patterns('',
-    # Examples:
 
     url(r'^', include('tutorboard.urls')),
-    #url(r'^$', RedirectView.as_view(url='/tutorboard/')),
-    #url(r'^tutorboard/', include('tutorboard.urls')),
     url(r'^search/', include('haystack.urls')),
     url(r'^login/$', login),
     url(r'^logout/$', logout),
-    
-
-    # Uncomment the admin/doc line below to enable admin documentation:
-    # url(r'^admin/doc/', include('django.contrib.admindocs.urls')),
-
-
     url(r'^admin/', include(admin.site.urls)),
-) + static(settings.MEDIA_URL, document_root=settings.MEDIA_ROOT)
+
+) + static(settings.MEDIA_URL, document_root=settings.MEDIA_ROOT) + static(settings.STATIC_URL, document_root=settings.STATIC_ROOT)
 
 

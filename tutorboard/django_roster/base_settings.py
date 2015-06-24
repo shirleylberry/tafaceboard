@@ -1,4 +1,5 @@
 # Django settings for roster project.
+import os
 
 DEBUG = False
 TEMPLATE_DEBUG = DEBUG
@@ -102,7 +103,9 @@ INSTALLED_APPS = (
     'django.contrib.staticfiles',
     'django.contrib.admin',
     'django.contrib.admindocs',
+    'haystack',
     'tutorboard',
+
 )
 
 # A sample logging configuration. The only tangible logging
@@ -139,4 +142,11 @@ CACHES = {
         'BACKEND': 'django.core.cache.backends.db.DatabaseCache',
         'LOCATION': 'tutorboard_cache',
     }
+}
+
+HAYSTACK_CONNECTIONS = {
+    'default': {
+        'ENGINE': 'haystack.backends.whoosh_backend.WhooshEngine',
+        'PATH': os.path.join(os.path.dirname(__file__), 'whoosh_index'),
+    },
 }

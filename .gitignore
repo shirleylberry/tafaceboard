@@ -65,9 +65,6 @@ docs/_build/
 # PyBuilder
 target/
 
-# media and images
-*.jpg
-*.png
-*.gif
-
+# media
+media/
 .idea/

@@ -623,12 +623,26 @@ form > div:nth-of-type(20) {
 /*******************/
 
 #filters select { width: 100%;}
-#filters option { font-size: 16px; text-align: center; }
-#filters .panel-body { padding: 0; }
+#filters option { font-size: 12px; text-align: center; }
+#filters .panel-body { padding: 10px 5px; }
 #filters .panel-heading { padding: 0; }
 #filters .panel-title a { width: 100%; display: inline-block; padding: 5px; }
 #filters label{cursor:pointer;}
+#filters input[type='submit']{
+    float:right;
+    margin:5px 20px;
+    background-color: #8C404B;
+    color:white;
+    border:0;
+    padding:5px;
+    border-radius: 6px;
+}
 #id_subjects{height:300px;}
+/* #94172A */
+.panel-default>.panel-heading{background-color: #8C404B; }
+.panel-default>.panel-heading label{color:white;}
+.panel-group .panel+.panel{margin:0;}
+
 
 
 /*******************/

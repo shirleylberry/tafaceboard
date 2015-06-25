@@ -87,11 +87,11 @@ function saveCapability(data){
     event.preventDefault();
 
     var $capabilityForm = $(this);
-    var $formContainer = $capabilityForm.parent('.capability-form-container');
+    var $formContainer = $capabilityForm.parent('.well').parent('.capability-form-container');
     var formData = {};
     $capabilityForm.serializeArray().map(function(x){formData[x.name] = x.value;}); // Converts the form data into a dictionary
 
-    $formContainer.html('<img src="/static/img/spinner.gif">');
+    $formContainer.html('<img src="/static/img/spinner.gif"><div style="height:191px;"></div>');
 
     if (formData.id == 'None'){
         $.post("/capability/create/", formData, function (data) {

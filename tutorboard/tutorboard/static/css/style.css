@@ -2,7 +2,7 @@
 /*     Global      */
 /*******************/
 body {
-    background-image: url('/static/img/streetgrid.gif');
+    background-image: url('/static/img/streetgrid-light.gif');
     font-family: 'Arial', sans-serif;
     color: black;
 }
@@ -291,7 +291,8 @@ hr { border-color: RGB(237, 237, 237); }
 .update {
     text-decoration: none;
     border-radius: 6px;
-    background-color: RGB(190, 190, 190);
+    background-color: #8C404B;
+    border:1px solid white;
     color: white;
     padding: 0 15px 0 15px;
     position: absolute;
@@ -459,12 +460,10 @@ hr { border-color: RGB(237, 237, 237); }
 }
 
 .tutor-block {
-    position: relative;
     display: inline-block;
-    float: left;
     height: auto;
-    margin-top: 8px;
 }
+.days{display: inline-block; }
 
 .tutor-availability {
     background-color: white;
@@ -487,14 +486,6 @@ hr { border-color: RGB(237, 237, 237); }
 
 .never-updated {
     border: 2px solid orange;
-}
-
-.last-updated {
-    position: relative;
-    margin-left: 350px;
-    padding: 8px;
-    background-color: white;
-    height: 15px;
 }
 
 .tutor-availability span {
@@ -528,8 +519,6 @@ form > div:nth-of-type(20) {
 }
 
 #tutor-update {
-    position: relative;
-    top: 100px;
 }
 
 #tutor-update p {
@@ -541,8 +530,8 @@ form > div:nth-of-type(20) {
 }
 
 #tutor-update input[type=submit] {
-    margin: 20px;
-    font-size: 26px;
+    margin: 10px;
+    font-size: 16px;
     color: #fff;
     background-color: #F10026;
     cursor: pointer;
@@ -551,7 +540,7 @@ form > div:nth-of-type(20) {
     text-decoration: none;
     text-shadow: 1px 1px 5px rgba(0, 0, 0, 0.5);
     text-align: center;
-    display: inline-block;
+    display: block;
     line-height: 1;
     -moz-border-radius: 7px;
     border-radius: 7px;
@@ -625,9 +614,43 @@ form > div:nth-of-type(20) {
 /*******************/
 
 #filters select { width: 100%;}
-#filters option { font-size: 16px; text-align: center; }
-#filters .panel-body { padding: 0; }
+#filters option { font-size: 12px; text-align: center; }
+#filters .panel-body { padding: 10px 5px; }
 #filters .panel-heading { padding: 0; }
 #filters .panel-title a { width: 100%; display: inline-block; padding: 5px; }
 #filters label{cursor:pointer;}
+#filters input[type='submit']{
+    float:right;
+    margin:5px 20px;
+    background-color: #8C404B;
+    color:white;
+    border:0;
+    padding:5px;
+    border-radius: 6px;
+}
 #id_subjects{height:300px;}
+/* #94172A */
+.panel-default>.panel-heading{background-color: #8C404B; }
+.panel-default>.panel-heading label{color:white;}
+.panel-group .panel+.panel{margin:0;}
+
+
+
+/*******************/
+/*   Update Page   */
+/*******************/
+form ul{padding:0}
+form ul li input{width:auto;}
+.form-control{height:25px;}
+input.form-control[type=radio] {
+  margin: -5px 0 0;
+  margin-top: 1px\9;
+  line-height: normal;
+  display: inline;
+  width: 20px;
+}
+.tab-content{background-color: white;padding:40px 30px;}
+html.tutor_update body{background-image: none; background-color: #054561}
+.nav-tabs>li>a{color:white;}
+.nav-tabs>li>a:hover{background-color:#097BAD ;color:white;}
+.capability-form ul li{display:inline-block;}

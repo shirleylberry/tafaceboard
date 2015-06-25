@@ -23,8 +23,9 @@ function checkboxChange() {
             var capID = $formContainer.find('input.form-instance-id').val();
             $.post('/capability/' + capID + '/delete/', {}, function (data) {
                 console.log(data);
-                $formContainer.html('');
+
             });
+            $formContainer.html('');
         }
 
     }
@@ -41,33 +42,6 @@ function checkboxChange() {
 
 
 }
-
-//function subjectUpdateSubmit(event) {
-//    // Do ajax submit
-//    var $form = $(this).parent("form");
-//
-//    var subID = $form.parent(".capability-form").prevAll(".hiddenSub").val();
-//    if (!subID) {
-//        subID = -1;
-//    }
-//
-//    var capID = $form.parent(".capability-form").prevAll(".hiddenCap").val();
-//    if (!capID) {
-//        capID = -1;
-//    }
-//
-//    var checkedAction = '';
-//
-//    $(this).replaceWith('<img src="/media/images/spinner.gif">');
-//
-//    $.post("/tutorboard/"+ django_context.tutor_id +"/update/ajax/subjectlist/", $form.serialize(), function (data) {
-//        $form.parent('.capability-form').parent('.subject_update_model').replaceWith(data);
-//        $('.checkboxSub').off().change(checkboxChange);
-//        $('.subUpdateSubmit').off().click(subjectUpdateSubmit);
-//    });
-//    event.preventDefault();
-//    return false;
-//}
 
 function fixPhoneNumber() {
     var newnum = new String();
@@ -86,11 +60,11 @@ function saveCapability(data){
     event.preventDefault();
 
     var $capabilityForm = $(this);
-    var $formContainer = $capabilityForm.parent('.capability-form-container');
+    var $formContainer = $capabilityForm.parent('.well').parent('.capability-form-container');
     var formData = {};
     $capabilityForm.serializeArray().map(function(x){formData[x.name] = x.value;}); // Converts the form data into a dictionary
 
-    $formContainer.html('<img src="/static/img/spinner.gif">');
+    $formContainer.html('<img src="/static/img/spinner.gif"><div style="height:191px;"></div>');
 
     if (formData.id == 'None'){
         $.post("/capability/create/", formData, function (data) {

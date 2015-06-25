@@ -1,17 +1,17 @@
 # forms.py
 from django import forms
-from django.forms import ModelForm, ChoiceField
 from django.forms.fields import Field
-from tutorboard.models import Tutor, Capability, Subject, LEVEL, GENDER, AREA, HIREDFOR, PROFDEV
-
-from django.forms import CheckboxSelectMultiple, TextInput, HiddenInput, Textarea
 from django.forms.models import modelformset_factory
+from django.forms import TextInput, HiddenInput, Textarea, ChoiceField, RadioSelect, CheckboxInput
+
+from tutorboard.models import Tutor, Capability, Subject
+
 
 setattr(Field, 'is_hidden', lambda self: isinstance(self.widget, forms.HiddenInput))
 
-AVAILABILITY_CHOICES = [('zero', '0 - 5'),('five','5 - 10'),('ten','10 - 15')]
-LEVEL_CHOICES = [('PR','Professional'),('EX','Expert'),('DR','Director')]
-SUBJECT_CHOICES = [('cornerstone','Cornerstone'),('echelon','Echelon'),('sat','SAT'),('academic','Academic')]
+AVAILABILITY_CHOICES = [('zero', '0 - 5'), ('five', '5 - 10'), ('ten', '10 - 15')]
+LEVEL_CHOICES = [('PR', 'Professional'), ('EX', 'Expert'), ('DR', 'Director')]
+SUBJECT_CHOICES = [('cornerstone', 'Cornerstone'), ('echelon', 'Echelon'), ('sat', 'SAT'), ('academic', 'Academic')]
 
 class SearchForm(forms.Form):
     availability = forms.ChoiceField(widget=forms.RadioSelect, choices=AVAILABILITY_CHOICES, required=False)
@@ -23,27 +23,90 @@ class SearchForm(forms.Form):
 class TutorForm(forms.ModelForm):
     class Meta:
         model = Tutor
-        fields = ['bioline1',
-                  'bioline2',
-                  'bioline3',
-                  'bioline4',
-                  'bioline5',
-                  'highestLevel',
-                  'availability_note',
-                  'availability_vacation']
+        fields = [
+            'picture',
+            'fname',
+            'lname',
+
+            'availability',
+            'availability_note',
+            'availability_vacation',
+
+            'area',
+            'gotofor',
+            'bioline1',
+            'bioline2',
+            'bioline3',
+            'bioline4',
+            'bioline5',
+            'highestLevel',
+            'highestLevelManual',
+
+            'gender',
+            'email',
+            'altemail',
+
+            'cell',
+            'altphone',
+
+            'address1',
+            'address2',
+            'city',
+            'state',
+            'zip',
+            'neighborhood',
+            'hidden'
+
+            #'availability_updated',
+            ]
         widgets = {
-            'bioline1': TextInput(attrs={'class': 'update-bio'}),
-            'bioline2': TextInput(attrs={'class': 'update-bio'}),
-            'bioline3': TextInput(attrs={'class': 'update-bio'}),
-            'bioline4': TextInput(attrs={'class': 'update-bio'}),
-            'bioline5': TextInput(attrs={'class': 'update-bio'}),
-            'highestLevel': HiddenInput(),
-            'availability_note': Textarea(attrs={'rows': '4', 'cols': '40'}),
-            'availability_vacation': Textarea(attrs={'rows': '4', 'cols': '40'}),
+
+
+
+            #'picture':              TextInput(attrs={'class': 'form-control'}),
+            'fname':                TextInput(attrs={'class': 'form-control'}),
+            'lname':                TextInput(attrs={'class': 'form-control'}),
+
+            'availability':         TextInput(attrs={'class': 'form-control'}),
+            'availability_note':    Textarea(attrs={'rows': '4', 'cols': '40', 'class': 'form-control'}),
+            'availability_vacation': Textarea(attrs={'rows': '4', 'cols': '40', 'class': 'form-control'}),
+
+            'area':                 RadioSelect(attrs={'class': 'form-control'}),
+            'gotofor':              TextInput(attrs={'class': 'form-control'}),
+            'bioline1':             TextInput(attrs={'class': 'form-control'}),
+            'bioline2':             TextInput(attrs={'class': 'form-control'}),
+            'bioline3':             TextInput(attrs={'class': 'form-control'}),
+            'bioline4':             TextInput(attrs={'class': 'form-control'}),
+            'bioline5':             TextInput(attrs={'class': 'form-control'}),
+            'highestLevel':         HiddenInput(),
+            'highestLevelManual':   TextInput(attrs={'class': 'form-control'}),
+
+            'gender':               RadioSelect(attrs={'class': 'form-control'}),
+            'email':                TextInput(attrs={'class': 'form-control'}),
+            'altemail':             TextInput(attrs={'class': 'form-control'}),
+            'cell':                 TextInput(attrs={'class': 'form-control'}),
+            'altphone':             TextInput(attrs={'class': 'form-control'}),
+
+            'address1':             TextInput(attrs={'class': 'form-control'}),
+            'address2':             TextInput(attrs={'class': 'form-control'}),
+            'city':                 TextInput(attrs={'class': 'form-control'}),
+            'state':                TextInput(attrs={'class': 'form-control'}),
+            'zip':                  TextInput(attrs={'class': 'form-control'}),
+
+            'neighborhood':         TextInput(attrs={'class': 'form-control'}),
+            'hidden':               CheckboxInput(attrs={'class': 'form-control'}),
         }
 
 
 class AvailabilityForm(forms.ModelForm):
+
+    def clean_availability(self):
+        availability = self.cleaned_data.get('availability')
+        if availability is None:
+            return 0
+        else:
+            return availability
+
     class Meta:
         model = Tutor
         fields = ['fname', 'lname', 'availability', ]
@@ -59,10 +122,11 @@ class CapabilityForm(forms.ModelForm):
 
     class Meta:
         model = Capability
-        fields = ['level', 'level_note', 'score', 'area', 'notes', 'subject', 'tutor', 'id']
+        fields = ['level', 'score', 'area', 'level_note', 'notes', 'subject', 'tutor', 'id']
         widgets = {
             'score': TextInput(attrs={'size': '4'}),
-            'notes': Textarea(attrs={'rows': '4', 'cols': '40'}),
+            'notes': Textarea(attrs={'rows': '4', 'cols': '30'}),
+            'level_note': Textarea(attrs={'rows': '4', 'cols': '30'}),
             'tutor': HiddenInput(),
             'subject': HiddenInput(),
         }

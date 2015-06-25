@@ -1,5 +1,20 @@
 from models import Tutor, Capability, Subject, AREA, GENDER, AVAILABILITY
 from django_filters import FilterSet, MultipleChoiceFilter, ModelMultipleChoiceFilter, BooleanFilter, ModelChoiceFilter, ChoiceFilter
+from django import forms
+
+SORT = (
+    ('magic', 'Magic'),
+    ('-availability', 'Most available'),
+    ('availability', 'Least available'),
+    ('fname', 'Name'),
+    ('level', 'Level'),
+)
+
+# TutorFilter adds the rest of the options to this form,
+# but the sort option doesn't act on any field of Tutor, so it needs to
+# be in a parent form that the TutorFilter uses.
+class TutorFilterForm(forms.Form):
+    sort = forms.ChoiceField(widget=forms.RadioSelect, choices=SORT, required=False)
 
 class AreaChoiceFilter(MultipleChoiceFilter):
     def filter(self, qs, value):
@@ -16,5 +31,6 @@ class TutorFilter(FilterSet):
 
     class Meta:
         model = Tutor
+        form = TutorFilterForm
         fields = ['area', 'gender', 'hidden', 'subjects', 'availability']
 

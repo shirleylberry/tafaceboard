@@ -2,7 +2,7 @@
 
 from django.conf.urls import patterns, url
 
-from tutorboard import views
+from tutorboard.views import tutor, capability, pages
 
 urlpatterns = patterns("",
 
@@ -13,14 +13,14 @@ urlpatterns = patterns("",
     # /tutorboard/
     url(
        regex=r"^$",
-       view=views.page_tutor_list,
+       view=pages.page_tutor_list,
        name='home'
     ),
 
     # /tutorboard/availability
     url(
        regex=r'^availability/$',
-       view=views.page_tutor_availability,
+       view=pages.page_tutor_availability,
        name='availability'
     ),
 
@@ -30,14 +30,14 @@ urlpatterns = patterns("",
 
     url(
        regex=r"^list/page(?P<page>[0-9]+)/$",
-       view=views.TutorView.as_view(),
+       view=tutor.TutorView.as_view(),
        name='list'
     ),
 
     # Create: /tutorboard/create
     url(
        regex=r"^create/",
-       view=views.TutorCreate.as_view(),
+       view=tutor.TutorCreate.as_view(),
        name='create'
     ),
 
@@ -45,7 +45,7 @@ urlpatterns = patterns("",
     url(
        regex=r'^(?P<tutor_id>\d+)/$',
        # view = views.update_tutor,
-       view=views.TutorUpdateView.as_view(),
+       view=tutor.TutorUpdateView.as_view(),
        name='update'
     ),
 
@@ -57,7 +57,7 @@ urlpatterns = patterns("",
     # /tutorboard/capability/create
     url(
        regex=r"^capability/create/",
-       view=views.CapabilityCreate.as_view(),
+       view=capability.CapabilityCreate.as_view(),
        name='capability_create'
     ),
 
@@ -65,7 +65,7 @@ urlpatterns = patterns("",
     # /tutorboard/capability/{tutorID}/delete/
     url(
        regex=r'^capability/(?P<capability_id>\d+)/delete/$',
-       view=views.CapabilityDelete.as_view(),
+       view=capability.CapabilityDelete.as_view(),
        name='capability_delete'
     ),
 
@@ -73,7 +73,7 @@ urlpatterns = patterns("",
     # /tutorboard/capability/{tutorID}/
     url(
        regex=r'^capability/(?P<capability_id>\d+)/$',
-       view=views.CapabilityUpdateView.as_view(),
+       view=capability.CapabilityUpdateView.as_view(),
        name='capability_update'
     ),
 

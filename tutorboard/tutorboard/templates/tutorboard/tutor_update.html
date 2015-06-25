@@ -13,12 +13,37 @@
 
     {{ success }}
 
-    <div id="tutor-update">
-        <div class="update-info">
-            <form method="post" action="">
+    <div id="tutor-update" class="container">
+        <nav>
+          <ul class="pagination">
+          {% if prev_tutor %}
+            <li>
+              <a href="{% url 'update' prev_tutor.id %}" aria-label="Previous">
+                <span aria-hidden="true">&laquo; {{ prev_tutor.fname }} {{ prev_tutor.lname }}</span>
+              </a>
+            </li>
+              {% endif %}
+          {% if next_tutor %}
+            <li>
+              <a href="{% url 'update' next_tutor.id %}" aria-label="Next">
+                <span aria-hidden="true">{{ next_tutor.fname }} {{ next_tutor.lname }} &raquo;</span>
+              </a>
+            </li>
+          {% endif %}
+          </ul>
+        </nav>
+
+        <!-- Nav tabs -->
+        <ul class="nav nav-tabs" role="tablist">
+            <li role="presentation" class="active"><a href="#info" aria-controls="info" role="tab" data-toggle="tab">Info</a></li>
+            <li role="presentation"><a href="#subjects" aria-controls="subjects" role="tab" data-toggle="tab">subjects</a></li>
+        </ul>
+        <div class="tab-content">
+            <div role="tabpanel" class="tab-pane active" id="info">
+                <form method="post" action="" class="form-horizontal">
 
                 {% for field in form %}
-                    <div class="update-info-unit"
+                    <div class="form-group"
                          {% if field|is_textarea %}style="display:block;"{% endif %}
                          {% if field|is_upload %}style="display:block;"{% endif %}
                             >
@@ -27,24 +52,26 @@
                         {% endif %}
                         {% if field.field.is_hidden %}
                         {% else %}
-                            <div>{{ field.label_tag }}</div>
+                            <label for="id_{{ field.name }}" class="col-md-2">{{ field.name }}</label>
                         {% endif %}
-                        {{ field }}
+                    <div class="col-md-6">{{ field }}</div>
+
                     </div>
                 {% endfor %}
 
                 {% csrf_token %}
 
+                <div class="errors">{{ form_errors }}</div>
                 <input type="submit" name="save" value="save">
 
                 {% if next_tutor %}
                     <input type="submit" name="saveAndNext" value="save and next">
                 {% endif %}
 
-            </form>
-
-
-            {% for sub in all_subjects %}
+                </form>
+            </div>
+            <div role="tabpanel" class="tab-pane" id="subjects">
+                {% for sub in all_subjects %}
                 <div class="subject-container">
 
                     <label for="checkSub{{ sub.id }}">
@@ -58,9 +85,8 @@
                     <input type="hidden" class="hiddenSub" name="{{ sub.name }}" value="{{ sub.id }}"/>
 
                     <span class="checkResult"></span>
-                    <br>
 
-                    <div class="capability-form-container">
+                    <div class="capability-form-container ">
                         {% for form in capability_forms %}
                             {% if form.subject.value == sub.id %}
                                 {% include 'tutorboard/capability_update.html' with form=form %}
@@ -68,32 +94,17 @@
                         {% endfor %}
                     </div>
 
-                    <br>
-                    <hr>
                 </div>
 
             {% endfor %}
-
-
-
-            {% if prev_tutor %}
-                <span class="next-button">
-                    <a href="{% url 'update' prev_tutor.id %}">
-                        Edit previous tutor: {{ prev_tutor.fname }} {{ prev_tutor.lname }}
-                    </a>
-                </span>
-            {% endif %}
-
-            {% if next_tutor %}
-                <span class="next-button">
-                    <a href="{% url 'update' next_tutor.id %}">
-                        Edit next tutor: {{ next_tutor.fname }} {{ next_tutor.lname }}
-                    </a>
-                </span>
-            {% endif %}
-
+            </div>
         </div>
-        <div class="errors">{{ form_errors }}</div>
+
+
+
+
+
+
     </div>
 {% endblock %}
 

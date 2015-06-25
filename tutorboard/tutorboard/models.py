@@ -105,6 +105,8 @@ class Tutor(models.Model):
 
     subjects = models.ManyToManyField(Subject, through='Capability')
 
+    old_notes = models.TextField(blank=True)
+
     def get_absolute_url(self):
         return "/%i/" % self.id
 

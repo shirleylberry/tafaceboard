@@ -17,6 +17,8 @@ def page_tutor_availability(request):
     TutorFormSet = modelformset_factory(Tutor, form=AvailabilityForm)
     if request.method == 'POST':
         formset = TutorFormSet(request.POST, request.FILES)
+        #for form in formset:
+        #    print form.fields['availability'].value
         if formset.is_valid():
             formset.save()
     else:

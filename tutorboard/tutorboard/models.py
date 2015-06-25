@@ -49,19 +49,19 @@ PROFDEV = (
 )
 
 AVAILABILITY = (
-    (0, '>0'),
-    (1, '>1'),
-    (5, '>5'),
-    (10, '>10'),
+    (-1, '>=0'),
+    (0, '>=1'),
+    (4, '>=5'),
+    (9, '>=10'),
 )
 
 
 class Subject(models.Model):
     name = models.CharField(max_length=255, blank=True)
-    image = models.ImageField(upload_to='images/icons/', blank=True, null=True)
+    image = models.ImageField(upload_to='images/icons/', blank=True, null=True, default='images/icons/blank_subject.gif')
 
     is_ap = models.BooleanField(default=False)
-    imageAP = models.ImageField(upload_to='images/icons/', blank=True, null=True)
+    imageAP = models.ImageField(upload_to='images/icons/', blank=True, null=True, default='images/icons/blank_subject.gif')
 
     def __unicode__(self):
         return self.name
@@ -97,7 +97,7 @@ class Tutor(models.Model):
     # Descriptors
     gender = models.CharField(max_length=255, choices=GENDER, blank=True)
     area = models.CharField(max_length=255, choices=AREA, default=AREA[1][0], blank=True)
-    availability = models.IntegerField(default=0, blank=True)
+    availability = models.IntegerField(default=0, blank=True, null=True)
     availability_note = models.TextField(blank=True)
     availability_vacation = models.TextField(blank=True)
     availability_updated = models.DateTimeField(auto_now=True, blank=True, null=True)

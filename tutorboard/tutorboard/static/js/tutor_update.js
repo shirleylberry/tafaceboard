@@ -43,33 +43,6 @@ function checkboxChange() {
 
 }
 
-//function subjectUpdateSubmit(event) {
-//    // Do ajax submit
-//    var $form = $(this).parent("form");
-//
-//    var subID = $form.parent(".capability-form").prevAll(".hiddenSub").val();
-//    if (!subID) {
-//        subID = -1;
-//    }
-//
-//    var capID = $form.parent(".capability-form").prevAll(".hiddenCap").val();
-//    if (!capID) {
-//        capID = -1;
-//    }
-//
-//    var checkedAction = '';
-//
-//    $(this).replaceWith('<img src="/media/images/spinner.gif">');
-//
-//    $.post("/tutorboard/"+ django_context.tutor_id +"/update/ajax/subjectlist/", $form.serialize(), function (data) {
-//        $form.parent('.capability-form').parent('.subject_update_model').replaceWith(data);
-//        $('.checkboxSub').off().change(checkboxChange);
-//        $('.subUpdateSubmit').off().click(subjectUpdateSubmit);
-//    });
-//    event.preventDefault();
-//    return false;
-//}
-
 function fixPhoneNumber() {
     var newnum = new String();
     var rawnum = $(this).val();

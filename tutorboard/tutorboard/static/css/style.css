@@ -291,7 +291,8 @@ hr { border-color: RGB(237, 237, 237); }
 .update {
     text-decoration: none;
     border-radius: 6px;
-    background-color: RGB(190, 190, 190);
+    background-color: #8C404B;
+    border:1px solid white;
     color: white;
     padding: 0 15px 0 15px;
     position: absolute;
@@ -459,12 +460,10 @@ hr { border-color: RGB(237, 237, 237); }
 }
 
 .tutor-block {
-    position: relative;
     display: inline-block;
-    float: left;
     height: auto;
-    margin-top: 8px;
 }
+.days{display: inline-block; }
 
 .tutor-availability {
     background-color: white;
@@ -487,14 +486,6 @@ hr { border-color: RGB(237, 237, 237); }
 
 .never-updated {
     border: 2px solid orange;
-}
-
-.last-updated {
-    position: relative;
-    margin-left: 350px;
-    padding: 8px;
-    background-color: white;
-    height: 15px;
 }
 
 .tutor-availability span {

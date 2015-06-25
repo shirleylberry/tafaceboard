@@ -145,6 +145,8 @@ class Migration(DataMigration):
         new_subs.append(sub18)
 
         for s in new_subs:
+            if not s.image:
+                s.image = 'images/icons/blank_subject.gif'
             s.save()
 
         tutors = orm.Tutor.objects.all()
@@ -238,6 +240,7 @@ class Migration(DataMigration):
                     skill_cap_subject = sub58
                 elif skill.skill == 'Schoology':
                     skill_cap_subject = sub56
+
                 if skill_cap_subject is not None:
                     skill_cap = orm.Capability.objects.create(subject=skill_cap_subject, tutor=tutor)
                     skill_cap.save()
@@ -260,6 +263,8 @@ class Migration(DataMigration):
                     break
 
                 new_subs_for_tutor = []
+
+                sub_image = sub.image
 
                 # what sub is it?
                 if sub.name == 'Cornerstone Math':

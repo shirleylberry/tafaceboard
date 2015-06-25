@@ -6,7 +6,7 @@
 
 {% block django_context_data %}
     {{ block.super }}
-    django_context.tutor_id = {{ tutor_id }};
+    django_context.tutor_id = null;
 {% endblock %}
 
 {% block content %}
@@ -20,7 +20,7 @@
             {% if not form.instance.hidden %}
             <div class="tutor-availability">
                     <div class = "tutor-block">
-                            <h1 class="name">{{ form.fname.value|default_if_none:"" }} {{ form.lname.value|default_if_none:"" }}</h1>
+                            <strong class="name">{{ form.fname.value|default_if_none:"" }} {{ form.lname.value|default_if_none:"" }}</strong>
                             {{ form.fname.as_hidden }}
                             {{ form.lname.as_hidden }}
                             <span>{{ form.availability }}</span>

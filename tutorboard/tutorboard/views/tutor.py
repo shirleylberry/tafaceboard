@@ -1,7 +1,7 @@
 from django.views.generic import CreateView, UpdateView
 from django.views.generic import ListView
 from django.core.urlresolvers import reverse
-
+from django.core.exceptions import ObjectDoesNotExist
 from tutorboard.models import Tutor, Subject
 from tutorboard.forms import TutorForm, CapabilityForm
 from tutorboard.filters import TutorFilter
@@ -16,10 +16,12 @@ class TutorView(ListView):
 
     def get_queryset(self):
         qs = super(TutorView, self).get_queryset()
+        print qs.count()
 
         # Filter
         f = TutorFilter(self.request.GET, queryset=qs)
         qs = f.qs
+        print qs.count()
 
         # Get subjects
         qs = qs.prefetch_related('capability_set__subject',).all().exclude(hidden=True)
@@ -32,6 +34,8 @@ class TutorView(ListView):
             pass # TODO
         elif sort_type is not None:
             qs = qs.order_by(sort_type)
+
+        print qs.count()
 
         return qs
 
@@ -74,10 +78,20 @@ class TutorUpdateView(UpdateView):
         context['all_subjects'] = subjects
 
         for cap in self.object.capability_set.all():
+            valid_cap = True
+            try:
+                sub_test = cap.subject
+            except ObjectDoesNotExist:
+                valid_cap = False
+                cap.save()
+                cap.delete()
+
             cap_form = CapabilityForm(instance=cap, auto_id='')
             capability_forms.append(cap_form)
-            for sub in subjects:
-                if sub == cap.subject:
-                    sub.selected = True
+            if valid_cap:
+                for sub in subjects:
+                    if cap.subject and sub == cap.subject:
+                        sub.selected = True
+
         context['capability_forms'] = capability_forms
         return context

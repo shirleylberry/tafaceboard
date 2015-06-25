@@ -9,9 +9,9 @@ from tutorboard.models import Tutor, Capability, Subject
 
 setattr(Field, 'is_hidden', lambda self: isinstance(self.widget, forms.HiddenInput))
 
-AVAILABILITY_CHOICES = [('zero', '0 - 5'),('five','5 - 10'),('ten','10 - 15')]
-LEVEL_CHOICES = [('PR','Professional'),('EX','Expert'),('DR','Director')]
-SUBJECT_CHOICES = [('cornerstone','Cornerstone'),('echelon','Echelon'),('sat','SAT'),('academic','Academic')]
+AVAILABILITY_CHOICES = [('zero', '0 - 5'), ('five', '5 - 10'), ('ten', '10 - 15')]
+LEVEL_CHOICES = [('PR', 'Professional'), ('EX', 'Expert'), ('DR', 'Director')]
+SUBJECT_CHOICES = [('cornerstone', 'Cornerstone'), ('echelon', 'Echelon'), ('sat', 'SAT'), ('academic', 'Academic')]
 
 class SearchForm(forms.Form):
     availability = forms.ChoiceField(widget=forms.RadioSelect, choices=AVAILABILITY_CHOICES, required=False)
@@ -99,6 +99,14 @@ class TutorForm(forms.ModelForm):
 
 
 class AvailabilityForm(forms.ModelForm):
+
+    def clean_availability(self):
+        availability = self.cleaned_data.get('availability')
+        if availability is None:
+            return 0
+        else:
+            return availability
+
     class Meta:
         model = Tutor
         fields = ['fname', 'lname', 'availability', ]

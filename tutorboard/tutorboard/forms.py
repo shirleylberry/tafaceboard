@@ -2,7 +2,7 @@
 from django import forms
 from django.forms.fields import Field
 from django.forms.models import modelformset_factory
-from django.forms import TextInput, HiddenInput, Textarea
+from django.forms import TextInput, HiddenInput, Textarea, ChoiceField, RadioSelect, CheckboxInput
 
 from tutorboard.models import Tutor, Capability, Subject
 
@@ -29,7 +29,6 @@ class TutorForm(forms.ModelForm):
             'lname',
 
             'availability',
-
             'availability_note',
             'availability_vacation',
 
@@ -61,14 +60,41 @@ class TutorForm(forms.ModelForm):
             #'availability_updated',
             ]
         widgets = {
-            'bioline1': TextInput(attrs={'class': 'update-bio'}),
-            'bioline2': TextInput(attrs={'class': 'update-bio'}),
-            'bioline3': TextInput(attrs={'class': 'update-bio'}),
-            'bioline4': TextInput(attrs={'class': 'update-bio'}),
-            'bioline5': TextInput(attrs={'class': 'update-bio'}),
-            'highestLevel': HiddenInput(),
-            'availability_note': Textarea(attrs={'rows': '4', 'cols': '40'}),
-            'availability_vacation': Textarea(attrs={'rows': '4', 'cols': '40'}),
+
+
+
+            #'picture':              TextInput(attrs={'class': 'form-control'}),
+            'fname':                TextInput(attrs={'class': 'form-control'}),
+            'lname':                TextInput(attrs={'class': 'form-control'}),
+
+            'availability':         TextInput(attrs={'class': 'form-control'}),
+            'availability_note':    Textarea(attrs={'rows': '4', 'cols': '40', 'class': 'form-control'}),
+            'availability_vacation': Textarea(attrs={'rows': '4', 'cols': '40', 'class': 'form-control'}),
+
+            'area':                 RadioSelect(attrs={'class': 'form-control'}),
+            'gotofor':              TextInput(attrs={'class': 'form-control'}),
+            'bioline1':             TextInput(attrs={'class': 'form-control'}),
+            'bioline2':             TextInput(attrs={'class': 'form-control'}),
+            'bioline3':             TextInput(attrs={'class': 'form-control'}),
+            'bioline4':             TextInput(attrs={'class': 'form-control'}),
+            'bioline5':             TextInput(attrs={'class': 'form-control'}),
+            'highestLevel':         HiddenInput(),
+            'highestLevelManual':   TextInput(attrs={'class': 'form-control'}),
+
+            'gender':               RadioSelect(attrs={'class': 'form-control'}),
+            'email':                TextInput(attrs={'class': 'form-control'}),
+            'altemail':             TextInput(attrs={'class': 'form-control'}),
+            'cell':                 TextInput(attrs={'class': 'form-control'}),
+            'altphone':             TextInput(attrs={'class': 'form-control'}),
+
+            'address1':             TextInput(attrs={'class': 'form-control'}),
+            'address2':             TextInput(attrs={'class': 'form-control'}),
+            'city':                 TextInput(attrs={'class': 'form-control'}),
+            'state':                TextInput(attrs={'class': 'form-control'}),
+            'zip':                  TextInput(attrs={'class': 'form-control'}),
+
+            'neighborhood':         TextInput(attrs={'class': 'form-control'}),
+            'hidden':               CheckboxInput(attrs={'class': 'form-control'}),
         }
 
 
@@ -88,10 +114,11 @@ class CapabilityForm(forms.ModelForm):
 
     class Meta:
         model = Capability
-        fields = ['level', 'level_note', 'score', 'area', 'notes', 'subject', 'tutor', 'id']
+        fields = ['level', 'score', 'area', 'level_note', 'notes', 'subject', 'tutor', 'id']
         widgets = {
             'score': TextInput(attrs={'size': '4'}),
-            'notes': Textarea(attrs={'rows': '4', 'cols': '40'}),
+            'notes': Textarea(attrs={'rows': '4', 'cols': '30'}),
+            'level_note': Textarea(attrs={'rows': '4', 'cols': '30'}),
             'tutor': HiddenInput(),
             'subject': HiddenInput(),
         }

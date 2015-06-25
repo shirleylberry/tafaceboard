@@ -23,8 +23,9 @@ function checkboxChange() {
             var capID = $formContainer.find('input.form-instance-id').val();
             $.post('/capability/' + capID + '/delete/', {}, function (data) {
                 console.log(data);
-                $formContainer.html('');
+
             });
+            $formContainer.html('');
         }
 
     }

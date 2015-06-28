@@ -2,9 +2,9 @@
 from django import forms
 from django.forms.fields import Field
 from django.forms.models import modelformset_factory
-from django.forms import TextInput, HiddenInput, Textarea, ChoiceField, RadioSelect, CheckboxInput
+from django.forms import TextInput, HiddenInput, Textarea, ChoiceField, RadioSelect, CheckboxInput, CheckboxSelectMultiple, ModelMultipleChoiceField
 
-from tutorboard.models import Tutor, Capability, Subject
+from tutorboard.models import Tutor, Capability, Subject, HiredFor, ProDevelopment
 
 
 setattr(Field, 'is_hidden', lambda self: isinstance(self.widget, forms.HiddenInput))
@@ -21,6 +21,9 @@ class SearchForm(forms.Form):
 
 
 class TutorForm(forms.ModelForm):
+    #hired_for = ModelMultipleChoiceField(queryset=HiredFor.objects.all(), to_field_name='name')
+    #pro_development = ModelMultipleChoiceField(queryset=ProDevelopment.objects.all(), to_field_name='name')
+
     class Meta:
         model = Tutor
         fields = [
@@ -33,6 +36,7 @@ class TutorForm(forms.ModelForm):
             'availability_vacation',
 
             'area',
+
             'gotofor',
             'bioline1',
             'bioline2',
@@ -55,7 +59,11 @@ class TutorForm(forms.ModelForm):
             'state',
             'zip',
             'neighborhood',
-            'hidden'
+            'hidden',
+
+            'hired_for',
+            'pro_development'
+
 
             #'availability_updated',
             ]
@@ -80,6 +88,8 @@ class TutorForm(forms.ModelForm):
             'bioline5':             TextInput(attrs={'class': 'form-control'}),
             'highestLevel':         HiddenInput(),
             'highestLevelManual':   TextInput(attrs={'class': 'form-control'}),
+
+
 
             'gender':               RadioSelect(attrs={'class': 'form-control'}),
             'email':                TextInput(attrs={'class': 'form-control'}),

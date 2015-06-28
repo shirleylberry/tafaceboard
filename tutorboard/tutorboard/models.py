@@ -69,6 +69,18 @@ class Subject(models.Model):
     class Meta:
         ordering = ('name',)
 
+class HiredFor(models.Model):
+    name = models.CharField(max_length=255, blank=True)
+
+    def __unicode__(self):
+        return self.name
+
+class ProDevelopment(models.Model):
+    name = models.CharField(max_length=255, blank=True)
+
+    def __unicode__(self):
+        return self.name
+
 
 class Tutor(models.Model):
     fname = models.CharField(max_length=255, blank=True)
@@ -105,6 +117,9 @@ class Tutor(models.Model):
 
     subjects = models.ManyToManyField(Subject, through='Capability')
 
+    hired_for = models.ManyToManyField(HiredFor)
+    pro_development = models.ManyToManyField(ProDevelopment)
+
     old_notes = models.TextField(blank=True)
 
     def get_absolute_url(self):
@@ -130,20 +145,3 @@ class Capability(models.Model):
 
     def __unicode__(self):
         return self.tutor.lname + " - " + self.subject.name
-
-
-#
-# End of Database Models
-# 
-
-
-# 
-# View Models. These don't correspond with database tables. Only carry data from views to templates
-#
-
-class SubjectUpdate(models.Model):
-    tutor_id = None
-    subject = Subject()
-    subject_form = ''
-    capability = Capability()
-    capability_form = ''

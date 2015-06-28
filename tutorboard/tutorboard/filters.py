@@ -25,6 +25,8 @@ class AreaChoiceFilter(MultipleChoiceFilter):
 class TutorFilter(FilterSet):
     area = AreaChoiceFilter(choices=AREA)
     subjects = ModelMultipleChoiceFilter
+    hired_for_set = ModelMultipleChoiceFilter
+    pro_development_set = ModelMultipleChoiceFilter
     availability = ChoiceFilter(choices=AVAILABILITY, lookup_type='gt')
     gender = MultipleChoiceFilter(choices=GENDER)
     hidden = BooleanFilter()

@@ -24,6 +24,11 @@ class TutorForm(forms.ModelForm):
     #hired_for = ModelMultipleChoiceField(queryset=HiredFor.objects.all(), to_field_name='name')
     #pro_development = ModelMultipleChoiceField(queryset=ProDevelopment.objects.all(), to_field_name='name')
 
+    def __init__(self, *args, **kwargs):
+        super(TutorForm, self).__init__(*args, **kwargs)
+        self.fields['hired_for'].required = False
+        self.fields['pro_development'].required = False
+
     class Meta:
         model = Tutor
         fields = [
@@ -104,7 +109,7 @@ class TutorForm(forms.ModelForm):
             'zip':                  TextInput(attrs={'class': 'form-control'}),
 
             'neighborhood':         TextInput(attrs={'class': 'form-control'}),
-            'hidden':               CheckboxInput(attrs={'class': 'form-control'}),
+            #'hidden':               CheckboxInput(attrs={'class': 'form-control'}),
         }
 
 

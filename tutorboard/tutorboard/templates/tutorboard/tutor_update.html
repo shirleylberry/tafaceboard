@@ -54,7 +54,7 @@
                         {% else %}
                             <label for="id_{{ field.name }}" class="col-md-2">{{ field.name }}</label>
                         {% endif %}
-                    <div class="col-md-6">{{ field }}</div>
+                    <div class="col-md-6">{{ field }}<div class="bg-danger">{{ field.errors }}</div></div>
 
                     </div>
                 {% endfor %}

@@ -25,7 +25,10 @@ function checkboxChange() {
                 console.log(data);
 
             });
-            $formContainer.html('');
+            $formContainer.children().slideUp(500,function(){
+                $formContainer.html('');
+            });
+
         }
 
     }

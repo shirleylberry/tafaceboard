@@ -22,6 +22,7 @@ class AreaChoiceFilter(MultipleChoiceFilter):
             value.append('crossover')
         return super(AreaChoiceFilter, self).filter(qs, value)
 
+
 class TutorFilter(FilterSet):
     area = AreaChoiceFilter(choices=AREA)
     subjects = ModelMultipleChoiceFilter
@@ -30,6 +31,8 @@ class TutorFilter(FilterSet):
     availability = ChoiceFilter(choices=AVAILABILITY, lookup_type='gt')
     gender = MultipleChoiceFilter(choices=GENDER)
     hidden = BooleanFilter()
+
+
 
     class Meta:
         model = Tutor

@@ -8,7 +8,7 @@ from tutorboard.filters import TutorFilter
 from tutorboard.views.helpers import findNextTutor, findPrevTutor
 
 class TutorView(ListView):
-    tutor_list = []
+    #tutor_list = []
     model = Tutor
     context_object_name = 'tutor_list'
     template_name = 'tutorboard/partials/tutorboard.html'
@@ -16,15 +16,20 @@ class TutorView(ListView):
 
     def get_queryset(self):
         qs = super(TutorView, self).get_queryset()
-        print qs.count()
+
+        request_get = self.request.GET.copy()
+
+        # '1' is the default for hidden, which is Unknown
+        # We want to default to '3' which is show all 'not hidden' tutors
+        if request_get.get('hidden') == '1':
+            request_get['hidden'] = '3'
 
         # Filter
-        f = TutorFilter(self.request.GET, queryset=qs)
+        f = TutorFilter(request_get, queryset=qs)
         qs = f.qs
-        print qs.count()
 
         # Get subjects
-        qs = qs.prefetch_related('capability_set__subject',).all().exclude(hidden=True)
+        qs = qs.prefetch_related('capability_set__subject',)
 
         # Sort
         sort_type = self.request.GET.get('sort')
@@ -34,8 +39,6 @@ class TutorView(ListView):
             pass # TODO
         elif sort_type is not None:
             qs = qs.order_by(sort_type)
-
-        print qs.count()
 
         return qs
 
@@ -58,6 +61,14 @@ class TutorUpdateView(UpdateView):
     form_class = TutorForm
     pk_url_kwarg = 'tutor_id'
     context_object_name = 'tutor'
+
+    def form_valid(self, form):
+        form_copy = form
+        return super(TutorUpdateView, self).form_valid(form)
+
+    def form_invalid(self, form):
+        form_copy = form
+        return super(TutorUpdateView, self).form_invalid(form)
 
     def get_queryset(self):
         qs = super(TutorUpdateView, self).get_queryset()

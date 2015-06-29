@@ -25,6 +25,8 @@ class AreaChoiceFilter(MultipleChoiceFilter):
 class TutorFilter(FilterSet):
     area = AreaChoiceFilter(choices=AREA)
     subjects = ModelMultipleChoiceFilter
+    hired_for = ModelMultipleChoiceFilter
+    pro_development = ModelMultipleChoiceFilter
     availability = ChoiceFilter(choices=AVAILABILITY, lookup_type='gt')
     gender = MultipleChoiceFilter(choices=GENDER)
     hidden = BooleanFilter()
@@ -32,5 +34,5 @@ class TutorFilter(FilterSet):
     class Meta:
         model = Tutor
         form = TutorFilterForm
-        fields = ['area', 'gender', 'hidden', 'subjects', 'availability']
+        fields = ['area', 'gender', 'hidden', 'subjects', 'availability', 'hired_for', 'pro_development']
 

@@ -16,6 +16,8 @@ class CapabilityUpdateView(UpdateView):
     def form_valid(self, form):
         context = self.get_context_data(form=form)
         context["result_message"] = "Saved."
+        self.object = form.save()
+
         # This usually redirects to get_success_url, but we'll just return a template
         return self.render_to_response(context)
 

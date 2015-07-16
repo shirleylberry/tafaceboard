@@ -40,6 +40,12 @@
 {% block content_main %}
     <div id="tutorboard">
     </div>
+    <div id="scroller">
+        <span class="scroller-message">Scroll to load more tutors.</span>
+        <span class="scroller-image" style="display:none">
+            <img alt="loading tutors" src="{% static "img/spinner.gif" %}">
+        </span>
+    </div>
 {% endblock %}
 
 {% block content_bottom %}

@@ -3,6 +3,8 @@ var currentPage = 1;
 var loadReady = false;
 
 function loadTutors(){
+    $('#scroller .scroller-message').html('Loading tutors');
+    $('#scroller .scroller-image').show();
     var getURL = '/list/page' + currentPage +'/';
     $.ajax({
         url: getURL,
@@ -12,6 +14,10 @@ function loadTutors(){
             console.log('Error while loading tutors:');
             console.log(textStatus);
             console.log(errorThrown);
+            if (errorThrown.trim() == "NOT FOUND"){
+                $('#scroller .scroller-message').html('End of tutor list');
+                $('#scroller .scroller-image').hide();
+            }
         },
         success: function(data){
             currentPage++;
@@ -22,6 +28,9 @@ function loadTutors(){
 
             $('.lazy-img').imageloader();
             loadReady = true;
+
+            $('#scroller .scroller-message').html('Scroll to load more tutors');
+            $('#scroller .scroller-image').hide();
         }
     });
 }

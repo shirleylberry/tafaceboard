@@ -12,7 +12,7 @@ class TutorView(ListView):
     model = Tutor
     context_object_name = 'tutor_list'
     template_name = 'tutorboard/partials/tutorboard.html'
-    paginate_by = 10
+    paginate_by = 20
 
     def get_queryset(self):
         qs = super(TutorView, self).get_queryset()

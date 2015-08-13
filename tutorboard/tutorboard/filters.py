@@ -1,4 +1,4 @@
-from models import Tutor, Capability, Subject, AREA, GENDER, AVAILABILITY
+from models import Tutor, Capability, Subject, AREA, GENDER, AVAILABILITY, LEVEL
 from django_filters import FilterSet, MultipleChoiceFilter, ModelMultipleChoiceFilter, BooleanFilter, ModelChoiceFilter, ChoiceFilter
 from django import forms
 
@@ -22,6 +22,17 @@ class AreaChoiceFilter(MultipleChoiceFilter):
             value.append('crossover')
         return super(AreaChoiceFilter, self).filter(qs, value)
 
+class LevelChoiceFilter(ChoiceFilter):
+    def filter(self, qs, value):
+        _qs = qs
+        _value = value
+        if value == u'no':
+            value = u''
+        filter = super(LevelChoiceFilter, self).filter(qs, value)
+        return filter
+
+
+
 
 class TutorFilter(FilterSet):
     area = AreaChoiceFilter(choices=AREA)
@@ -31,11 +42,12 @@ class TutorFilter(FilterSet):
     availability = ChoiceFilter(choices=AVAILABILITY, lookup_type='gt')
     gender = MultipleChoiceFilter(choices=GENDER)
     hidden = BooleanFilter()
+    highestLevel = LevelChoiceFilter(choices=LEVEL, label='Level')
 
 
 
     class Meta:
         model = Tutor
         form = TutorFilterForm
-        fields = ['area', 'gender', 'hidden', 'subjects', 'availability', 'hired_for', 'pro_development']
+        fields = ['area', 'gender', 'hidden', 'subjects', 'availability', 'hired_for', 'pro_development', 'highestLevel']
 

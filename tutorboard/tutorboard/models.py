@@ -1,7 +1,7 @@
 from django.db import models
 
 LEVEL = (
-    ('no', 'No'),
+    ('no', 'Any'),
     ('trained', 'Trained'),
     ('professional', 'Professional'),
     ('endorsed', 'Endorsed Professional'),

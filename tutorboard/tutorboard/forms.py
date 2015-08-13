@@ -92,7 +92,7 @@ class TutorForm(forms.ModelForm):
             'bioline4':             TextInput(attrs={'class': 'form-control'}),
             'bioline5':             TextInput(attrs={'class': 'form-control'}),
             'highestLevel':         HiddenInput(),
-            'highestLevelManual':   TextInput(attrs={'class': 'form-control'}),
+            'highestLevelManual':   RadioSelect(attrs={'class': 'form-control'}),
 
 
 

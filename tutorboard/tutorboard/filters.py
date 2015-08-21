@@ -42,12 +42,12 @@ class TutorFilter(FilterSet):
     availability = ChoiceFilter(choices=AVAILABILITY, lookup_type='gt')
     gender = MultipleChoiceFilter(choices=GENDER)
     hidden = BooleanFilter()
-    highestLevel = LevelChoiceFilter(choices=LEVEL, label='Level')
+    highestLevelManual = LevelChoiceFilter(choices=LEVEL, label='Level')
 
 
 
     class Meta:
         model = Tutor
         form = TutorFilterForm
-        fields = ['area', 'gender', 'hidden', 'subjects', 'availability', 'hired_for', 'pro_development', 'highestLevel']
+        fields = ['area', 'gender', 'hidden', 'subjects', 'availability', 'hired_for', 'pro_development', 'highestLevelManual']
 

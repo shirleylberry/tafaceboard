@@ -69,14 +69,24 @@ class Subject(models.Model):
     class Meta:
         ordering = ('name',)
 
+
 class HiredFor(models.Model):
     name = models.CharField(max_length=255, blank=True)
 
     def __unicode__(self):
         return self.name
 
+
 class ProDevelopment(models.Model):
     name = models.CharField(max_length=255, blank=True)
+
+    def __unicode__(self):
+        return self.name
+
+
+class TutorTag(models.Model):
+    name = models.CharField(max_length=255, blank=True)
+    description = models.TextField(blank=True)
 
     def __unicode__(self):
         return self.name
@@ -116,6 +126,7 @@ class Tutor(models.Model):
     picture = models.ImageField(upload_to='images/', blank=True, null=True)
 
     subjects = models.ManyToManyField(Subject, through='Capability')
+    tags = models.ManyToManyField(TutorTag)
 
     hired_for = models.ManyToManyField(HiredFor)
     pro_development = models.ManyToManyField(ProDevelopment)
@@ -145,3 +156,6 @@ class Capability(models.Model):
 
     def __unicode__(self):
         return self.tutor.lname + " - " + self.subject.name
+
+
+

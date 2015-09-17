@@ -42,7 +42,9 @@ class TutorForm(forms.ModelForm):
 
             'area',
 
+
             'gotofor',
+            'tags',
             'bioline1',
             'bioline2',
             'bioline3',

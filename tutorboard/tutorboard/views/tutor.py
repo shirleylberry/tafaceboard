@@ -2,10 +2,11 @@ from django.views.generic import CreateView, UpdateView
 from django.views.generic import ListView
 from django.core.urlresolvers import reverse
 from django.core.exceptions import ObjectDoesNotExist
-from tutorboard.models import Tutor, Subject
+from tutorboard.models import Tutor, Subject, Capability
 from tutorboard.forms import TutorForm, CapabilityForm
 from tutorboard.filters import TutorFilter
 from tutorboard.views.helpers import findNextTutor, findPrevTutor
+
 
 class TutorView(ListView):
     #tutor_list = []
@@ -24,9 +25,24 @@ class TutorView(ListView):
         if request_get.get('hidden') == '1':
             request_get['hidden'] = '3'
 
+        q_subjects = None
+        q_level = None
+        if request_get.get('subjects') and request_get.get('highestLevelManual') and request_get.get('highestLevelManual') != 'no':
+
+            q_subjects = request_get.get('subjects')
+            request_get.pop('subjects')
+            q_level = request_get.get('highestLevelManual')
+            request_get.pop('highestLevelManual')
+            caps = Capability.objects.filter(level=q_level, subject__pk=q_subjects)
+            tutor_pks = []
+            for cap in caps.all():
+                tutor_pks.append(cap.tutor.pk)
+            qs = qs.filter(pk__in=tutor_pks)
+
         # Filter
         f = TutorFilter(request_get, queryset=qs)
         qs = f.qs
+        qs = qs.distinct()
 
         # Get subjects
         qs = qs.prefetch_related('capability_set__subject',)
@@ -34,9 +50,9 @@ class TutorView(ListView):
         # Sort
         sort_type = self.request.GET.get('sort')
         if sort_type == 'level':
-            pass # TODO
+            pass  # TODO
         elif sort_type == 'magic':
-            pass # TODO
+            pass  # TODO
         elif sort_type is not None:
             qs = qs.order_by(sort_type)
 
@@ -46,6 +62,7 @@ class TutorView(ListView):
         context = super(TutorView, self).get_context_data(**kwargs)
         return context
 
+
 class TutorCreate(CreateView):
     template_name_suffix = '_create'
     model = Tutor
@@ -54,6 +71,7 @@ class TutorCreate(CreateView):
 
     def get_success_url(self):
         return reverse('update', args=(self.object.id,))
+
 
 class TutorUpdateView(UpdateView):
     model = Tutor

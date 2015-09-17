@@ -49,6 +49,7 @@ class TutorFilter(FilterSet):
     class Meta:
         model = Tutor
         form = TutorFilterForm
-        fields = ['area', 'gender', 'hidden', 'subjects', 'availability', 'tags', 'hired_for',
-                  'pro_development', 'highestLevelManual']
+        fields = ['area', 'subjects', 'highestLevelManual', 'availability', 'gender',  'tags', 'hired_for',
+                  'pro_development', 'hidden']
+
 

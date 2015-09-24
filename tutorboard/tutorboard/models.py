@@ -126,7 +126,7 @@ class Tutor(models.Model):
     picture = models.ImageField(upload_to='images/', blank=True, null=True)
 
     subjects = models.ManyToManyField(Subject, through='Capability')
-    tags = models.ManyToManyField(TutorTag)
+    tags = models.ManyToManyField(TutorTag, blank=True, default=None)
 
     hired_for = models.ManyToManyField(HiredFor)
     pro_development = models.ManyToManyField(ProDevelopment)
